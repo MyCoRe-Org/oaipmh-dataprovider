@@ -1,17 +1,43 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
-  <groupId>org.mycore</groupId>
+  <parent>
+    <artifactId>mycore-parent</artifactId>
+    <groupId>org.mycore</groupId>
+    <version>11-SNAPSHOT</version>
+  </parent>
   <artifactId>oaipmh-dataprovider</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-
+  <version>0.1-SNAPSHOT</version>
   <name>oaipmh-dataprovider</name>
-  <url>http://maven.apache.org</url>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.target.version>1.6</java.target.version>
   </properties>
+
+  <scm>
+    <connection>scm:svn:http://server.mycore.de/svn/maven/${artifactId}/trunk</connection>
+    <developerConnection>scm:svn:https://server.mycore.de/svn/maven/${artifactId}/trunk</developerConnection>
+    <url>http://www.mycore.de/viewvc/viewvc.cgi/maven/${artifactId}/</url>
+  </scm>
+  <repositories>
+    <repository>
+      <id>MyCoRe HQ</id>
+      <url>http://www.mycore.de/artifactory/mycore-releases</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>MyCoRe HQ Snapshots</id>
+      <url>http://www.mycore.de/artifactory/mycore-snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 
   <build>
     <!-- lifecycle mapping for m2eclipse @see http://wiki.eclipse.org/M2E_plugin_execution_not_covered -->
