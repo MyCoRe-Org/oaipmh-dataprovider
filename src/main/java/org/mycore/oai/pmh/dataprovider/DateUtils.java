@@ -32,14 +32,20 @@ public abstract class DateUtils {
     }
 
     /**
-     * Sets a new static granularity.
+     * Sets a new static date granularity.
      * 
-     * @param granularity the granularity to set
+     * @param granularity
+     *            the granularity to set
      */
     public static void setGranularity(Granularity granularity) {
         currentGranularity = granularity;
     }
 
+    /**
+     * Returns the static date granularity.
+     * 
+     * @return the date granularity
+     */
     public static Granularity getGranularity() {
         return currentGranularity;
     }
@@ -105,11 +111,12 @@ public abstract class DateUtils {
     }
 
     /**
-     * Returns the granularity of a date.
+     * Returns the granularity of a UTC date.
      * 
      * @param date
-     * @return
+     * @return the granularity of the given date
      * @throws ParseException
+     *             if the date is not in UTC format
      */
     public static Granularity getGranularity(String date) throws ParseException {
         parse(date);

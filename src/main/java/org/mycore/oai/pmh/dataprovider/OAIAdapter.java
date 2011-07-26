@@ -42,6 +42,7 @@ public interface OAIAdapter {
      * Returns a list of {@link Set}s.
      * 
      * @param resumptionToken
+     *            flow control token returned by a previous ListRecords request that issued an incomplete list
      * @return a list of Sets
      * @throws NoSetHierarchyException
      *             The repository does not support sets.
@@ -54,7 +55,8 @@ public interface OAIAdapter {
      * Returns the {@link Set} by the given setSpec. If no set is found a {@link NoRecordsMatchException} is thrown.
      * 
      * @param setSpec
-     * @return
+     *            short cut of the set
+     * @return Set if found
      * @throws NoSetHierarchyException
      *             The repository does not support sets.
      * @throws NoRecordsMatchException
@@ -74,8 +76,10 @@ public interface OAIAdapter {
      * Returns the metadata format by prefix.
      * 
      * @param prefix
-     * @return
+     *            prefix of the metadata format
+     * @return metadata format which is linked with the prefix
      * @throws CannotDisseminateFormatException
+     *             The metadata prefix argument is not supported by the repository.
      */
     public MetadataFormat getMetadataFormat(String prefix) throws CannotDisseminateFormatException;
 
@@ -130,7 +134,7 @@ public interface OAIAdapter {
      * 
      * @param resumptionToken
      *            flow control token returned by a previous ListRecords request that issued an incomplete list
-     * @return
+     * @return list of records with or without a resumption token
      * @throws BadResumptionTokenException
      *             The value of the resumptionToken argument is invalid or expired.
      */
@@ -140,10 +144,14 @@ public interface OAIAdapter {
      * Returns a list of records matching the set and/or datestamp.
      * 
      * @param format
+     *            (required) {@link MetadataFormat} that should be included in the metadata part of the returned record
      * @param set
+     *            (optional) {@link Set} argument, which specifies set criteria for selective harvesting.
      * @param from
+     *            (optional) date argument, which specifies a lower bound for datestamp-based selective harvesting.
      * @param until
-     * @return
+     *            (optional) date argument, which specifies a upper bound for datestamp-based selective harvesting.
+     * @return list of records with or without a resumption token
      * @throws CannotDisseminateFormatException
      *             The metadata format is not supported by the repository.
      * @throws NoSetHierarchyException
@@ -176,7 +184,7 @@ public interface OAIAdapter {
      *            (optional) date argument, which specifies a lower bound for datestamp-based selective harvesting.
      * @param until
      *            (optional) date argument, which specifies a upper bound for datestamp-based selective harvesting.
-     * @return
+     * @return list of headers with or without a resumption token
      * @throws CannotDisseminateFormatException
      *             The metadata format is not supported by the repository
      * @throws NoSetHierarchyException

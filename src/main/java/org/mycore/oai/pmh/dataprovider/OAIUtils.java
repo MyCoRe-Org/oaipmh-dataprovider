@@ -32,6 +32,13 @@ public abstract class OAIUtils {
         }
     }
 
+    /**
+     * Returns the identifier description of the identify object or null, if no
+     * identifier description is set.
+     * 
+     * @param identify the OAI-PMH identify object
+     * @return instance of <code>OAIIdentifierDescription</code> or null
+     */
     public static OAIIdentifierDescription getIdentifierDescription(Identify identify) {
         for (Description d : identify.getDescriptionList()) {
             if (d instanceof OAIIdentifierDescription)
@@ -41,10 +48,11 @@ public abstract class OAIUtils {
     }
 
     /**
-     * Converts a jdom element to a org.w3c.dom.Element.
+     * Converts a jdom element to a org.w3c.dom.Element. Be aware that the element already
+     * has a document as parent.
      * 
      * @param jdomElement the jdom element to convert
-     * @return 
+     * @return new w3c dom element
      * @throws JDOMException if a parsing exception occur
      */
     public static org.w3c.dom.Element jdomToDom(Element jdomElement) throws JDOMException {
