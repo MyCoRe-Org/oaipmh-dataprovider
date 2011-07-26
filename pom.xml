@@ -135,12 +135,10 @@
       <version>4.8.2</version>
       <scope>test</scope>
     </dependency>
-
-
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>oaipmh</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>0.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>
