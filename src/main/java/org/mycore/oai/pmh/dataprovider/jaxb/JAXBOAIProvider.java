@@ -4,10 +4,10 @@ import java.util.Date;
 
 import org.mycore.oai.pmh.BadArgumentException;
 import org.mycore.oai.pmh.BadVerbException;
+import org.mycore.oai.pmh.DateUtils;
 import org.mycore.oai.pmh.OAIException;
 import org.mycore.oai.pmh.OAIException.ErrorCode;
 import org.mycore.oai.pmh.Verb;
-import org.mycore.oai.pmh.dataprovider.DateUtils;
 import org.mycore.oai.pmh.dataprovider.OAIAdapter;
 import org.mycore.oai.pmh.dataprovider.OAIRequest;
 import org.mycore.oai.pmh.dataprovider.OAIResponse;

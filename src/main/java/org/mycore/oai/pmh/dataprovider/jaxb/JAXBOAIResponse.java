@@ -4,6 +4,7 @@ import java.io.StringWriter;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 
@@ -20,14 +21,9 @@ public class JAXBOAIResponse implements OAIResponse {
 
     private static JAXBContext jaxbContext;
 
-    private static Marshaller marshaller;
-
     static {
         try {
             jaxbContext = JAXBContext.newInstance(OAIPMHtype.class);
-            marshaller = jaxbContext.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, OAIConstants.SCHEMA_LOC_OAI);
-            marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
         } catch (Exception exc) {
             exc.printStackTrace();
         }
@@ -39,11 +35,19 @@ public class JAXBOAIResponse implements OAIResponse {
         this.oaipmh = oaipmh;
     }
 
+    private Marshaller createMarshaller() throws JAXBException {
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, OAIConstants.SCHEMA_LOC_OAI);
+        marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+        return marshaller;
+    }
+
     private Element marshal() throws JDOMException {
         try {
             NamespaceFilter outFilter = new NamespaceFilter();
             SAXHandler saxHandler = new SAXHandler();
             outFilter.setContentHandler(saxHandler);
+            Marshaller marshaller = createMarshaller();
             marshaller.marshal(new JAXBElement<OAIPMHtype>(new QName(OAIConstants.NS_OAI.getURI(), OAIConstants.XML_OAI_ROOT), OAIPMHtype.class,
                     this.oaipmh), outFilter);
             return saxHandler.getDocument().detachRootElement();

@@ -9,17 +9,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.mycore.oai.pmh.Argument;
 import org.mycore.oai.pmh.BadArgumentException;
+import org.mycore.oai.pmh.BadArgumentException.Type;
 import org.mycore.oai.pmh.Granularity;
 import org.mycore.oai.pmh.Identify;
+import org.mycore.oai.pmh.DateUtils;
 import org.mycore.oai.pmh.OAIIdentifierDescription;
-import org.mycore.oai.pmh.BadArgumentException.Type;
+import org.mycore.oai.pmh.OAIUtils;
 
 public class OAIRequest {
-
-    public enum Argument {
-        verb, identifier, metadataPrefix, from, until, set, resumptionToken
-    }
 
     public enum ArgumentType {
         optional, required, exclusive

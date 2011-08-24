@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.jdom.Document;
 import org.jdom.output.DOMOutputter;
+import org.mycore.oai.pmh.Argument;
 import org.mycore.oai.pmh.MetadataFormat;
 import org.mycore.oai.pmh.OAIException;
 import org.mycore.oai.pmh.Record;
@@ -12,7 +13,6 @@ import org.mycore.oai.pmh.Set;
 import org.mycore.oai.pmh.dataprovider.OAIAdapter;
 import org.mycore.oai.pmh.dataprovider.OAIImplementationException;
 import org.mycore.oai.pmh.dataprovider.OAIRequest;
-import org.mycore.oai.pmh.dataprovider.OAIRequest.Argument;
 import org.mycore.oai.pmh.dataprovider.OAIRequest.ArgumentType;
 import org.openarchives.oai.pmh.GetRecordType;
 import org.openarchives.oai.pmh.HeaderType;
@@ -29,7 +29,7 @@ public class GetRecordHandler extends JAXBVerbHandler {
 
     private static Map<Argument, ArgumentType> argumentMap = null;
     static {
-        argumentMap = new HashMap<OAIRequest.Argument, OAIRequest.ArgumentType>();
+        argumentMap = new HashMap<Argument, OAIRequest.ArgumentType>();
         argumentMap.put(Argument.identifier, ArgumentType.required);
         argumentMap.put(Argument.metadataPrefix, ArgumentType.required);
     }

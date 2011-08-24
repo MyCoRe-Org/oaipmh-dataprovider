@@ -18,14 +18,14 @@ import org.mycore.oai.pmh.MetadataFormat;
 import org.mycore.oai.pmh.NoMetadataFormatsException;
 import org.mycore.oai.pmh.NoRecordsMatchException;
 import org.mycore.oai.pmh.NoSetHierarchyException;
+import org.mycore.oai.pmh.OAIDataList;
+import org.mycore.oai.pmh.DateUtils;
 import org.mycore.oai.pmh.OAIIdentifierDescription;
 import org.mycore.oai.pmh.Record;
 import org.mycore.oai.pmh.Set;
 import org.mycore.oai.pmh.Header.Status;
 import org.mycore.oai.pmh.Identify.DeletedRecordPolicy;
-import org.mycore.oai.pmh.dataprovider.DateUtils;
 import org.mycore.oai.pmh.dataprovider.OAIAdapter;
-import org.mycore.oai.pmh.dataprovider.OAIDataList;
 import org.mycore.oai.pmh.dc.DCMetadataFormat;
 
 public class SimpleOAIAdapter implements OAIAdapter {
@@ -56,7 +56,7 @@ public class SimpleOAIAdapter implements OAIAdapter {
         String baseURL = "www.mycore.de";
         Date earliestDate = DateUtils.parseUTC("2010-10-10");
         String adminMail = "sampleuser@bugmenot.de";
-        this.id = new SimpleIdentify(reposName, baseURL, earliestDate, DeletedRecordPolicy.No, Granularity.YYYY_MM_DD_THH_MM_SS_Z, adminMail);
+        this.id = new SimpleTestIdentify(reposName, baseURL, earliestDate, DeletedRecordPolicy.No, Granularity.YYYY_MM_DD_THH_MM_SS_Z, adminMail);
         this.id.getDescriptionList().add(new OAIIdentifierDescription("sample.de", "sampleobject"));
         this.id.getDescriptionList().add(new FriendsDescription("www.spiegel.de", "www.golem.de"));
         // sets

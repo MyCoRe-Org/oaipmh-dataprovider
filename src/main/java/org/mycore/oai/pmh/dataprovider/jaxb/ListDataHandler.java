@@ -5,14 +5,14 @@ import java.util.Map;
 
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.mycore.oai.pmh.Argument;
 import org.mycore.oai.pmh.Header;
+import org.mycore.oai.pmh.OAIUtils;
 import org.mycore.oai.pmh.Record;
 import org.mycore.oai.pmh.Set;
 import org.mycore.oai.pmh.dataprovider.OAIAdapter;
 import org.mycore.oai.pmh.dataprovider.OAIImplementationException;
 import org.mycore.oai.pmh.dataprovider.OAIRequest;
-import org.mycore.oai.pmh.dataprovider.OAIUtils;
-import org.mycore.oai.pmh.dataprovider.OAIRequest.Argument;
 import org.mycore.oai.pmh.dataprovider.OAIRequest.ArgumentType;
 import org.openarchives.oai.pmh.AboutType;
 import org.openarchives.oai.pmh.HeaderType;
@@ -24,7 +24,7 @@ public abstract class ListDataHandler extends ListRequestsHandler {
 
     private static Map<Argument, ArgumentType> argumentMap = null;
     static {
-        argumentMap = new HashMap<OAIRequest.Argument, OAIRequest.ArgumentType>();
+        argumentMap = new HashMap<Argument, OAIRequest.ArgumentType>();
         argumentMap.put(Argument.from, ArgumentType.optional);
         argumentMap.put(Argument.until, ArgumentType.optional);
         argumentMap.put(Argument.metadataPrefix, ArgumentType.required);
@@ -48,7 +48,7 @@ public abstract class ListDataHandler extends ListRequestsHandler {
         if (record.getMetadata() != null) {
             try {
                 MetadataType metadataType = new MetadataType();
-                metadataType.setAny(OAIUtils.jdomToDom(record.getMetadata().toXML()));
+                metadataType.setAny(OAIUtils.jdomToDOM(record.getMetadata().toXML()));
                 recordType.setMetadata(metadataType);
             } catch (JDOMException exc) {
                 throw new OAIImplementationException(exc);
@@ -58,7 +58,7 @@ public abstract class ListDataHandler extends ListRequestsHandler {
             for (Element about : record.getAboutList()) {
                 AboutType aboutType = new AboutType();
                 try {
-                    aboutType.setAny(OAIUtils.jdomToDom(about));
+                    aboutType.setAny(OAIUtils.jdomToDOM(about));
                     recordType.getAbout().add(aboutType);
                 } catch (JDOMException exc) {
                     throw new OAIImplementationException(exc);

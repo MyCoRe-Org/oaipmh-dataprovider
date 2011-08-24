@@ -1,11 +1,11 @@
 package org.mycore.oai.pmh.dataprovider.jaxb;
 
 import org.mycore.oai.pmh.MetadataFormat;
+import org.mycore.oai.pmh.OAIDataList;
 import org.mycore.oai.pmh.OAIException;
 import org.mycore.oai.pmh.Record;
 import org.mycore.oai.pmh.Set;
 import org.mycore.oai.pmh.dataprovider.OAIAdapter;
-import org.mycore.oai.pmh.dataprovider.OAIDataList;
 import org.mycore.oai.pmh.dataprovider.OAIRequest;
 import org.openarchives.oai.pmh.ListRecordsType;
 import org.openarchives.oai.pmh.OAIPMHtype;

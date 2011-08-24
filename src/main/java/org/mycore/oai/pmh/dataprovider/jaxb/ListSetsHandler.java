@@ -4,15 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jdom.JDOMException;
+import org.mycore.oai.pmh.Argument;
 import org.mycore.oai.pmh.Description;
+import org.mycore.oai.pmh.OAIDataList;
 import org.mycore.oai.pmh.OAIException;
+import org.mycore.oai.pmh.OAIUtils;
 import org.mycore.oai.pmh.Set;
 import org.mycore.oai.pmh.dataprovider.OAIAdapter;
-import org.mycore.oai.pmh.dataprovider.OAIDataList;
 import org.mycore.oai.pmh.dataprovider.OAIImplementationException;
 import org.mycore.oai.pmh.dataprovider.OAIRequest;
-import org.mycore.oai.pmh.dataprovider.OAIUtils;
-import org.mycore.oai.pmh.dataprovider.OAIRequest.Argument;
 import org.mycore.oai.pmh.dataprovider.OAIRequest.ArgumentType;
 import org.openarchives.oai.pmh.DescriptionType;
 import org.openarchives.oai.pmh.ListSetsType;
@@ -23,7 +23,7 @@ public class ListSetsHandler extends ListRequestsHandler {
 
     private static Map<Argument, ArgumentType> argumentMap = null;
     static {
-        argumentMap = new HashMap<OAIRequest.Argument, OAIRequest.ArgumentType>();
+        argumentMap = new HashMap<Argument, OAIRequest.ArgumentType>();
         argumentMap.put(Argument.resumptionToken, ArgumentType.exclusive);
     }
 
@@ -54,7 +54,7 @@ public class ListSetsHandler extends ListRequestsHandler {
 	        for(Description description : set.getDescription()) {
 	            DescriptionType descriptionType = new DescriptionType();
 	            try {
-                    descriptionType.setAny(OAIUtils.jdomToDom(description.toXML()));
+                    descriptionType.setAny(OAIUtils.jdomToDOM(description.toXML()));
                     setType.getSetDescription().add(descriptionType);
                 } catch (JDOMException exc) {
                     throw new OAIImplementationException(exc);

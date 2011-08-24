@@ -1,12 +1,12 @@
 package org.mycore.oai.pmh.provider;
 
 import org.junit.Test;
+import org.mycore.oai.pmh.Argument;
 import org.mycore.oai.pmh.Verb;
 import org.mycore.oai.pmh.dataprovider.OAIRequest;
 import org.mycore.oai.pmh.dataprovider.OAIResponse;
-import org.mycore.oai.pmh.dataprovider.OAIXMLProvider;
-import org.mycore.oai.pmh.dataprovider.OAIRequest.Argument;
 import org.mycore.oai.pmh.dataprovider.OAIResponse.Format;
+import org.mycore.oai.pmh.dataprovider.OAIXMLProvider;
 import org.mycore.oai.pmh.dataprovider.jaxb.JAXBOAIProvider;
 
 public class OAIDataProviderTest {
@@ -19,7 +19,7 @@ public class OAIDataProviderTest {
         req.setArgument(Argument.identifier, oaiAdapter.modsRecord.getHeader().getId());
         req.setArgument(Argument.metadataPrefix, oaiAdapter.modsFormat.getPrefix());
         OAIResponse response = oaiProvider.handleRequest(req);
-        print(response);
+//        print(response);
     }
 
     @Test
@@ -27,7 +27,7 @@ public class OAIDataProviderTest {
         SimpleOAIAdapter oaiAdapter = new SimpleOAIAdapter();
         OAIXMLProvider oaiProvider = new JAXBOAIProvider(oaiAdapter);
         OAIRequest req = new OAIRequest(Verb.Identify.name());
-        print(oaiProvider.handleRequest(req));
+//        print(oaiProvider.handleRequest(req));
     }
 
     @Test

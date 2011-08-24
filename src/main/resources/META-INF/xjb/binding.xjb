@@ -11,12 +11,12 @@
   <jaxb:globalBindings >
     <!-- change dateTime to java.util.Calendar -->
     <jaxb:javaType name="java.util.Date" xmlType="xs:dateTime"
-      parseMethod="org.mycore.oai.pmh.dataprovider.DateUtils.parseUTC"
-      printMethod="org.mycore.oai.pmh.dataprovider.DateUtils.formatUTC" />
+      parseMethod="org.mycore.oai.pmh.DateUtils.parseUTC"
+      printMethod="org.mycore.oai.pmh.DateUtils.formatUTC" />
     <!-- change date to java.util.Date -->
     <jaxb:javaType name="java.util.Date" xmlType="oai:UTCdatetimeType"
-      parseMethod="org.mycore.oai.pmh.dataprovider.DateUtils.parseUTC"
-      printMethod="org.mycore.oai.pmh.dataprovider.DateUtils.formatUTC" />
+      parseMethod="org.mycore.oai.pmh.DateUtils.parseUTC"
+      printMethod="org.mycore.oai.pmh.DateUtils.formatUTC" />
   </jaxb:globalBindings>
 
   <jaxb:bindings schemaLocation="../schema/OAI-PMH.xsd">

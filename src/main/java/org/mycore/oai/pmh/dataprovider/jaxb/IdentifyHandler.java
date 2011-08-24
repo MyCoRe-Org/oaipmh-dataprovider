@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jdom.JDOMException;
+import org.mycore.oai.pmh.Argument;
 import org.mycore.oai.pmh.Description;
 import org.mycore.oai.pmh.Identify;
+import org.mycore.oai.pmh.OAIUtils;
 import org.mycore.oai.pmh.dataprovider.OAIAdapter;
 import org.mycore.oai.pmh.dataprovider.OAIImplementationException;
 import org.mycore.oai.pmh.dataprovider.OAIRequest;
-import org.mycore.oai.pmh.dataprovider.OAIUtils;
-import org.mycore.oai.pmh.dataprovider.OAIRequest.Argument;
 import org.mycore.oai.pmh.dataprovider.OAIRequest.ArgumentType;
 import org.openarchives.oai.pmh.DeletedRecordType;
 import org.openarchives.oai.pmh.DescriptionType;
@@ -26,7 +26,7 @@ public class IdentifyHandler extends JAXBVerbHandler {
 
     @Override
     public Map<Argument, ArgumentType> getArgumentMap() {
-        return new HashMap<OAIRequest.Argument, OAIRequest.ArgumentType>();
+        return new HashMap<Argument, OAIRequest.ArgumentType>();
     }
 
     @Override
@@ -46,7 +46,7 @@ public class IdentifyHandler extends JAXBVerbHandler {
         for (Description description : id.getDescriptionList()) {
             try {
                 DescriptionType descriptionType = new DescriptionType();
-                descriptionType.setAny(OAIUtils.jdomToDom(description.toXML()));
+                descriptionType.setAny(OAIUtils.jdomToDOM(description.toXML()));
                 returnId.getDescription().add(descriptionType);
             } catch (JDOMException exc) {
                 throw new OAIImplementationException(exc);

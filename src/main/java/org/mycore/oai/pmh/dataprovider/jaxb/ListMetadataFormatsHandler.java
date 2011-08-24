@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.mycore.oai.pmh.Argument;
 import org.mycore.oai.pmh.MetadataFormat;
 import org.mycore.oai.pmh.OAIConstants;
 import org.mycore.oai.pmh.OAIException;
 import org.mycore.oai.pmh.dataprovider.OAIAdapter;
 import org.mycore.oai.pmh.dataprovider.OAIImplementationException;
 import org.mycore.oai.pmh.dataprovider.OAIRequest;
-import org.mycore.oai.pmh.dataprovider.OAIRequest.Argument;
 import org.mycore.oai.pmh.dataprovider.OAIRequest.ArgumentType;
 import org.openarchives.oai.pmh.ListMetadataFormatsType;
 import org.openarchives.oai.pmh.MetadataFormatType;
@@ -20,7 +20,7 @@ public class ListMetadataFormatsHandler extends JAXBVerbHandler {
 
     private static Map<Argument, ArgumentType> argumentMap = null;
     static {
-        argumentMap = new HashMap<OAIRequest.Argument, OAIRequest.ArgumentType>();
+        argumentMap = new HashMap<Argument, OAIRequest.ArgumentType>();
         argumentMap.put(Argument.identifier, ArgumentType.optional);
     }
 

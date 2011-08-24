@@ -12,6 +12,7 @@ import org.mycore.oai.pmh.MetadataFormat;
 import org.mycore.oai.pmh.NoMetadataFormatsException;
 import org.mycore.oai.pmh.NoRecordsMatchException;
 import org.mycore.oai.pmh.NoSetHierarchyException;
+import org.mycore.oai.pmh.OAIDataList;
 import org.mycore.oai.pmh.Record;
 import org.mycore.oai.pmh.Set;
 
