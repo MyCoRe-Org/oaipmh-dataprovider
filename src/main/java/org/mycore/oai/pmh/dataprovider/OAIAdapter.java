@@ -100,22 +100,6 @@ public interface OAIAdapter {
     public List<MetadataFormat> getMetadataFormats(String identifier) throws IdDoesNotExistException, NoMetadataFormatsException;
 
     /**
-     * <p>
-     * Retrieve an individual metadata header from the repository. Use {@link #getRecord(String, MetadataFormat)} to get a full record with metadata.
-     * </p>
-     * <p>
-     * You can use this method to create a new record by calling "new Record(header) or new Record(header, metadata)"
-     * </p>
-     * 
-     * @param identifier
-     *            specifies the unique identifier of the item in the repository from which the record must be disseminated
-     * @return the header of a record from the repository
-     * @throws IdDoesNotExistException
-     *             The value of the identifier argument is unknown or illegal in this repository.
-     */
-    public Header getHeader(String identifier) throws IdDoesNotExistException;
-
-    /**
      * Retrieve an individual metadata record from the repository.
      * 
      * @param identifier

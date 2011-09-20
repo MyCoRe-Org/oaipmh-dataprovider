@@ -140,11 +140,6 @@ public class SimpleOAIAdapter implements OAIAdapter {
     }
 
     @Override
-    public Header getHeader(String identifier) throws IdDoesNotExistException {
-        return getRecord(identifier).getHeader();
-    }
-
-    @Override
     public Record getRecord(String identifier, MetadataFormat format) throws CannotDisseminateFormatException, IdDoesNotExistException {
         Record r = getRecord(identifier);
         if (r.equals(this.modsRecord) && !format.equals(modsFormat)) {

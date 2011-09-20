@@ -41,7 +41,7 @@ public class ListMetadataFormatsHandler extends JAXBVerbHandler {
         if (id == null) {
             // get all metadata formats
             formatList = this.oaiAdapter.getMetadataFormats();
-            if (!checkOAIDublicCore(formatList)) {
+            if (formatList == null || !checkOAIDublinCore(formatList)) {
                 throw new OAIImplementationException(
                         "OAI adapter has to support oai_dc (http://www.openarchives.org/OAI/openarchivesprotocol.html#MetadataNamespaces)."
                                 + "You can use DCMetadataFormat.");
@@ -73,7 +73,7 @@ public class ListMetadataFormatsHandler extends JAXBVerbHandler {
      *            list of metadata formats
      * @return true if list contains dublic core format
      */
-    private boolean checkOAIDublicCore(List<MetadataFormat> formatList) {
+    private boolean checkOAIDublinCore(List<MetadataFormat> formatList) {
         for (MetadataFormat f : formatList) {
             if (f.getNamespace().equals(OAIConstants.NS_OAI_DC.getURI()))
                 return true;
