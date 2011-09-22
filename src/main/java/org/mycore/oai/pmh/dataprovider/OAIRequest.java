@@ -237,15 +237,14 @@ public class OAIRequest {
 
     private Date checkDate(String dateAsString, Granularity reposG, Argument arg) throws BadArgumentException {
         try {
-            Date date = DateUtils.parse(dateAsString);
-            Granularity dateG = DateUtils.getGranularity(date);
+            Granularity dateG = DateUtils.getGranularity(dateAsString);
             if (Granularity.YYYY_MM_DD_THH_MM_SS_Z.equals(dateG) && Granularity.YYYY_MM_DD.equals(reposG)) {
                 // if date is YYYY_MM_DD_THH_MM_SS_Z but repository supports only YYYY_MM_DD
-                throw new BadArgumentException(Type.illegalSyntax, arg.name());
+                throw new BadArgumentException("Bad date syntax '" + arg.name() + "':" + dateAsString);
             }
-            return date;
+            return DateUtils.parse(dateAsString);
         } catch (ParseException pe) {
-            throw new BadArgumentException(Type.illegalSyntax, arg.name());
+            throw new BadArgumentException("Bad date syntax '" + arg.name() + "': " + dateAsString);
         }
     }
 

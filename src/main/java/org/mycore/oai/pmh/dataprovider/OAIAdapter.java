@@ -162,7 +162,8 @@ public interface OAIAdapter {
      * Returns a list of headers.
      * 
      * @param format
-     *            (required) {@link MetadataFormat} that should be included in the metadata part of the returned record
+     *            (required) {@link MetadataFormat} specifies that headers should be returned only if the metadata format matching the supplied metadataPrefix
+     *            is available or, depending on the repository's support for deletions, has been deleted.
      * @param set
      *            (optional) {@link Set} argument, which specifies set criteria for selective harvesting.
      * @param from

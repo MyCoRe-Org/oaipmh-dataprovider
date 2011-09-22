@@ -28,7 +28,7 @@ public class ListRecordsHandler extends ListDataHandler {
             if (request.isSet()) {
                 set = this.oaiAdapter.getSet(request.getSet());
             }
-            recordList = this.oaiAdapter.getRecords(format, set, request.getFrom(), request.getUntil());
+            recordList = this.oaiAdapter.getRecords(format, set, getFrom(request), getUntil(request));
         }
 
         // create jaxb element
