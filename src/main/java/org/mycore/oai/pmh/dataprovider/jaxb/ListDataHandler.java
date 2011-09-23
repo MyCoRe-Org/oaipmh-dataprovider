@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.mycore.oai.pmh.Argument;
@@ -25,6 +26,8 @@ import org.openarchives.oai.pmh.StatusType;
 
 public abstract class ListDataHandler extends ListRequestsHandler {
 
+    protected final static Logger LOGGER = Logger.getLogger(ListDataHandler.class);
+    
     private static Map<Argument, ArgumentType> argumentMap = null;
     static {
         argumentMap = new HashMap<Argument, OAIRequest.ArgumentType>();
@@ -76,10 +79,9 @@ public abstract class ListDataHandler extends ListRequestsHandler {
         String id = header.getId();
         // check if id is correct
         if(!OAIUtils.checkIdentifier(id, this.oaiAdapter.getIdentify())) {
-            throw new OAIImplementationException("invalid id " + id);
+            LOGGER.warn("invalid OAI-PMH id " + id);
         }
         headerType.setIdentifier(id);
-        // TODO: fix YYYY_MM_DD
         headerType.setDatestamp(header.getDatestamp());
         if (header.isDeleted()) {
             headerType.setStatus(StatusType.DELETED);

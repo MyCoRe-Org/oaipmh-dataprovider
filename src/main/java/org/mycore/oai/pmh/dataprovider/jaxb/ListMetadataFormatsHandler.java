@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.mycore.oai.pmh.Argument;
 import org.mycore.oai.pmh.MetadataFormat;
 import org.mycore.oai.pmh.OAIConstants;
 import org.mycore.oai.pmh.OAIException;
 import org.mycore.oai.pmh.dataprovider.OAIAdapter;
-import org.mycore.oai.pmh.dataprovider.OAIImplementationException;
 import org.mycore.oai.pmh.dataprovider.OAIRequest;
 import org.mycore.oai.pmh.dataprovider.OAIRequest.ArgumentType;
 import org.openarchives.oai.pmh.ListMetadataFormatsType;
@@ -17,6 +17,8 @@ import org.openarchives.oai.pmh.MetadataFormatType;
 import org.openarchives.oai.pmh.OAIPMHtype;
 
 public class ListMetadataFormatsHandler extends JAXBVerbHandler {
+
+    protected final static Logger LOGGER = Logger.getLogger(ListMetadataFormatsHandler.class);
 
     private static Map<Argument, ArgumentType> argumentMap = null;
     static {
@@ -42,9 +44,7 @@ public class ListMetadataFormatsHandler extends JAXBVerbHandler {
             // get all metadata formats
             formatList = this.oaiAdapter.getMetadataFormats();
             if (formatList == null || !checkOAIDublinCore(formatList)) {
-                throw new OAIImplementationException(
-                        "OAI adapter has to support oai_dc (http://www.openarchives.org/OAI/openarchivesprotocol.html#MetadataNamespaces)."
-                                + "You can use DCMetadataFormat.");
+                LOGGER.warn("OAI adapter has to support oai_dc (http://www.openarchives.org/OAI/openarchivesprotocol.html#MetadataNamespaces). You can use DCMetadataFormat class.");
             }
         } else {
             // get metadata formats of single object
