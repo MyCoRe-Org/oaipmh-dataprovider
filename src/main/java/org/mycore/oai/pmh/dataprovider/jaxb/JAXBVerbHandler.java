@@ -12,19 +12,17 @@ import org.openarchives.oai.pmh.OAIPMHtype;
 
 public abstract class JAXBVerbHandler implements VerbHandler<OAIPMHtype> {
 
-	protected OAIAdapter oaiAdapter;
+    protected OAIAdapter oaiAdapter;
 
-	public JAXBVerbHandler(OAIAdapter oaiAdapter) {
-		this.oaiAdapter = oaiAdapter;
-	}
+    public JAXBVerbHandler(OAIAdapter oaiAdapter) {
+        this.oaiAdapter = oaiAdapter;
+    }
 
-	/**
-	 * 
-	 * @param request
-	 * @param oaipmh
-	 */
-	public abstract OAIPMHtype handle(OAIRequest request) throws OAIException;
+    /**
+     * @param request
+     */
+    public abstract OAIPMHtype handle(OAIRequest request) throws OAIException;
 
-	public abstract Map<Argument, ArgumentType> getArgumentMap();
+    public abstract Map<Argument, ArgumentType> getArgumentMap();
 
 }
