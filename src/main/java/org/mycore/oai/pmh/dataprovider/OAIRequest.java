@@ -201,12 +201,17 @@ public class OAIRequest {
         Identify identify = oaiAdapter.getIdentify();
         Date from = null;
         Date until = null;
+        Granularity granularity = identify.getGranularity();
         if (isFromDateSet()) {
-            from = checkDate(this.from, identify.getGranularity(), Argument.from);
+            from = checkDate(this.from, granularity, Argument.from);
         }
         if (isUntilDateSet()) {
-            until = checkDate(this.until, identify.getGranularity(), Argument.until);
-            if(until.compareTo(identify.getEarliestDatestamp()) < 0) {
+            until = checkDate(this.until, granularity, Argument.until);
+            Date earliestDatestamp = identify.getEarliestDatestamp();
+            if(Granularity.YYYY_MM_DD.equals(granularity)) {
+                earliestDatestamp = DateUtils.startOfDay(earliestDatestamp);
+            }
+            if(until.compareTo(earliestDatestamp) < 0) {
                 throw new BadArgumentException("The until date must be greater or equal the earliest data stamp!");
             }
         }
