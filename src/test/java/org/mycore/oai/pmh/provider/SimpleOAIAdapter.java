@@ -8,6 +8,7 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 import org.mycore.oai.pmh.BadResumptionTokenException;
 import org.mycore.oai.pmh.CannotDisseminateFormatException;
+import org.mycore.oai.pmh.DefaultResumptionToken;
 import org.mycore.oai.pmh.FriendsDescription;
 import org.mycore.oai.pmh.Granularity;
 import org.mycore.oai.pmh.Header;
@@ -22,9 +23,11 @@ import org.mycore.oai.pmh.OAIDataList;
 import org.mycore.oai.pmh.DateUtils;
 import org.mycore.oai.pmh.OAIIdentifierDescription;
 import org.mycore.oai.pmh.Record;
+import org.mycore.oai.pmh.ResumptionToken;
 import org.mycore.oai.pmh.Set;
 import org.mycore.oai.pmh.Header.Status;
 import org.mycore.oai.pmh.Identify.DeletedRecordPolicy;
+import org.mycore.oai.pmh.SimpleResumptionToken;
 import org.mycore.oai.pmh.dataprovider.OAIAdapter;
 import org.mycore.oai.pmh.dc.DCMetadataFormat;
 
@@ -192,6 +195,7 @@ public class SimpleOAIAdapter implements OAIAdapter {
         }
         if (format.equals(modsFormat)) {
             OAIDataList<Header> l = new OAIDataList<Header>();
+            l.setResumptionToken(getRsToken());
             if (set == null) {
                 l.add(modsRecord.getHeader());
                 l.add(deletedRecord.getHeader());
@@ -202,6 +206,14 @@ public class SimpleOAIAdapter implements OAIAdapter {
             }
         }
         throw new NoRecordsMatchException();
+    }
+
+    private ResumptionToken getRsToken() {
+        DefaultResumptionToken rsToken = new DefaultResumptionToken();
+        rsToken.setCompleteListSize(1);
+        rsToken.setCursor(0);
+        rsToken.setToken("token");
+        return rsToken;
     }
 
     @Override

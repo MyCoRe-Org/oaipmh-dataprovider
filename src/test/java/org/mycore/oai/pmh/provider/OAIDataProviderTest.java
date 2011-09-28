@@ -27,7 +27,8 @@ public class OAIDataProviderTest {
         SimpleOAIAdapter oaiAdapter = new SimpleOAIAdapter();
         OAIXMLProvider oaiProvider = new JAXBOAIProvider(oaiAdapter);
         OAIRequest req = new OAIRequest(Verb.Identify.name());
-//        print(oaiProvider.handleRequest(req));
+        OAIResponse response = oaiProvider.handleRequest(req);
+//      print(response);
     }
 
     @Test
