@@ -61,14 +61,16 @@ public class GetRecordHandler extends JAXBVerbHandler {
         }
         recordType.setHeader(headerType);
         // metadata
-        MetadataType metadataType = new MetadataType();
-        try {
-            DOMOutputter outputter = new DOMOutputter();
-            org.w3c.dom.Document doc = outputter.output(new Document(record.getMetadata().toXML()));
-            metadataType.setAny(doc.getDocumentElement());
-            recordType.setMetadata(metadataType);
-        } catch (Exception exc) {
-            throw new OAIImplementationException(exc);
+        if(record.getMetadata() != null) {
+            MetadataType metadataType = new MetadataType();
+            try {
+                DOMOutputter outputter = new DOMOutputter();
+                org.w3c.dom.Document doc = outputter.output(new Document(record.getMetadata().toXML()));
+                metadataType.setAny(doc.getDocumentElement());
+                recordType.setMetadata(metadataType);
+            } catch (Exception exc) {
+                throw new OAIImplementationException(exc);
+            }
         }
         // return oaipmh
         OAIPMHtype oaipmh = new OAIPMHtype();
