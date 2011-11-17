@@ -20,15 +20,15 @@ import org.xml.sax.helpers.XMLFilterImpl;
 public class NamespaceFilter extends XMLFilterImpl {
 
     private static Logger LOGGER = Logger.getLogger(NamespaceFilter.class);
-    
+
     private String xmlns = "";
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
-        if(LOGGER.isDebugEnabled()) {
+        if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("start element (" + xmlns + "): " + uri + " " + localName + " " + qName);
         }
-        if(uri.equals(xmlns)) {
+        if (uri.equals(xmlns)) {
             super.startElement(uri, localName, localName, atts);
         } else {
             super.startElement(uri, localName, qName, atts);
@@ -37,20 +37,22 @@ public class NamespaceFilter extends XMLFilterImpl {
 
     @Override
     public void startPrefixMapping(String prefix, String uri) throws SAXException {
-        if(LOGGER.isDebugEnabled()) {
+        if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("start prefix (" + xmlns + "): " + prefix + " " + uri);
         }
-        if(uri == null || uri.equals("")) {
+        if (uri == null || uri.equals("")) {
             return;
         }
-        if(prefix == null || prefix.length() == 0) {
+        if (prefix == null || prefix.length() == 0) {
             xmlns = uri;
+        } else if (!uri.equals(xmlns)) {
+            super.startPrefixMapping(prefix, uri);
         }
     }
 
     @Override
     public void endPrefixMapping(String prefix) throws SAXException {
-        if(LOGGER.isDebugEnabled()) {
+        if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("end prefix (" + xmlns + "): " + prefix);
         }
     }

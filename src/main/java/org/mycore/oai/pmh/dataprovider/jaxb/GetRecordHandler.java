@@ -6,6 +6,7 @@ import java.util.Map;
 import org.jdom.Document;
 import org.jdom.output.DOMOutputter;
 import org.mycore.oai.pmh.Argument;
+import org.mycore.oai.pmh.Metadata;
 import org.mycore.oai.pmh.MetadataFormat;
 import org.mycore.oai.pmh.OAIException;
 import org.mycore.oai.pmh.Record;
@@ -62,20 +63,24 @@ public class GetRecordHandler extends JAXBVerbHandler {
         recordType.setHeader(headerType);
         // metadata
         if(record.getMetadata() != null) {
-            MetadataType metadataType = new MetadataType();
-            try {
-                DOMOutputter outputter = new DOMOutputter();
-                org.w3c.dom.Document doc = outputter.output(new Document(record.getMetadata().toXML()));
-                metadataType.setAny(doc.getDocumentElement());
-                recordType.setMetadata(metadataType);
-            } catch (Exception exc) {
-                throw new OAIImplementationException(exc);
-            }
+            recordType.setMetadata(getMetadataType(record.getMetadata()));
         }
         // return oaipmh
         OAIPMHtype oaipmh = new OAIPMHtype();
         oaipmh.setGetRecord(getRecordType);
         return oaipmh;
+    }
+
+    protected MetadataType getMetadataType(Metadata metadata) {
+        MetadataType metadataType = new MetadataType();
+        try {
+            DOMOutputter outputter = new DOMOutputter();
+            org.w3c.dom.Document doc = outputter.output(new Document(metadata.toXML()));
+            metadataType.setAny(doc.getDocumentElement());
+            return metadataType;
+        } catch (Exception exc) {
+            throw new OAIImplementationException(exc);
+        }
     }
 
 }

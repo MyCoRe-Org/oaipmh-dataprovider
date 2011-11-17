@@ -25,7 +25,7 @@ import org.openarchives.oai.pmh.VerbType;
  */
 public class JAXBOAIProvider implements OAIXMLProvider {
 
-    private OAIAdapter oaiAdapter;
+    protected OAIAdapter oaiAdapter;
 
     public JAXBOAIProvider(OAIAdapter oaiAdapter) {
         this.oaiAdapter = oaiAdapter;
@@ -44,17 +44,17 @@ public class JAXBOAIProvider implements OAIXMLProvider {
             return getErrorResponse(new BadVerbException(request.getVerb()), request);
         }
         if (Verb.GetRecord.equals(verb)) {
-            verbHandler = new GetRecordHandler(this.getAdapter());
+            verbHandler = getRecordHandler();
         } else if (Verb.Identify.equals(verb)) {
-            verbHandler = new IdentifyHandler(this.getAdapter());
+            verbHandler = getIdentifyHandler();
         } else if (Verb.ListIdentifiers.equals(verb)) {
-            verbHandler = new ListIdentifiersHandler(this.getAdapter());
+            verbHandler = getListIdentifiersHandler();
         } else if (Verb.ListMetadataFormats.equals(verb)) {
-            verbHandler = new ListMetadataFormatsHandler(this.getAdapter());
+            verbHandler = getListMetadataFormatsHandler();
         } else if (Verb.ListRecords.equals(verb)) {
-            verbHandler = new ListRecordsHandler(this.getAdapter());
+            verbHandler = getListRecordsHandler();
         } else if (Verb.ListSets.equals(verb)) {
-            verbHandler = new ListSetsHandler(this.getAdapter());
+            verbHandler = getListSetsHandler();
         } else {
             return getErrorResponse(new BadVerbException(request.getVerb()), request);
         }
@@ -75,7 +75,31 @@ public class JAXBOAIProvider implements OAIXMLProvider {
         }
     }
 
-    private RequestType getRequestType(OAIRequest req, boolean errorOccur) {
+    protected JAXBVerbHandler getRecordHandler() {
+        return new GetRecordHandler(this.getAdapter());
+    }
+    
+    protected JAXBVerbHandler getIdentifyHandler() {
+        return new IdentifyHandler(this.getAdapter());
+    }
+    
+    protected JAXBVerbHandler getListIdentifiersHandler() {
+        return new ListIdentifiersHandler(this.getAdapter());
+    }
+    
+    protected JAXBVerbHandler getListMetadataFormatsHandler() {
+        return new ListMetadataFormatsHandler(this.getAdapter());
+    }
+    
+    protected JAXBVerbHandler getListRecordsHandler() {
+        return new ListRecordsHandler(this.getAdapter());
+    }
+    
+    protected JAXBVerbHandler getListSetsHandler() {
+        return new ListSetsHandler(this.getAdapter());
+    }
+    
+    protected RequestType getRequestType(OAIRequest req, boolean errorOccur) {
         RequestType rt = new RequestType();
         rt.setValue(this.getAdapter().getIdentify().getBaseURL());
         if (!errorOccur) {
@@ -91,7 +115,7 @@ public class JAXBOAIProvider implements OAIXMLProvider {
         return rt;
     }
 
-    private OAIResponse getErrorResponse(OAIException oaiExc, OAIRequest request) {
+    protected OAIResponse getErrorResponse(OAIException oaiExc, OAIRequest request) {
         OAIPMHtype oaipmh = new OAIPMHtype();
         oaipmh.getError().add(getError(oaiExc.getCode(), oaiExc.getMessage()));
         oaipmh.setRequest(getRequestType(request, true));
@@ -99,14 +123,14 @@ public class JAXBOAIProvider implements OAIXMLProvider {
         return new JAXBOAIResponse(oaipmh);
     }
 
-    private OAIPMHerrorType getError(ErrorCode errorCode, String errorDescription) {
+    protected OAIPMHerrorType getError(ErrorCode errorCode, String errorDescription) {
         OAIPMHerrorType error = new OAIPMHerrorType();
         error.setCode(OAIPMHerrorcodeType.fromValue(errorCode.name()));
         error.setValue(errorDescription);
         return error;
     }
 
-    private Date getResponseDate() {
+    protected Date getResponseDate() {
         return DateUtils.getCurrentDate();
     }
 

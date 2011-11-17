@@ -38,6 +38,10 @@ public class SimpleOAIAdapter implements OAIAdapter {
     private static final Namespace NS_XSI = Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
     private static final Namespace NS_MODS = Namespace.getNamespace("mods", "http://www.loc.gov/mods/v3");
+    
+    private static final Namespace NS_DC = Namespace.getNamespace("dc", "http://purl.org/dc/elements/1.1/");
+    
+    private static final Namespace NS_DDB = Namespace.getNamespace("ddb", "http://www.d-nb.de/standards/ddb/");
 
     public Identify id;
 
@@ -77,8 +81,11 @@ public class SimpleOAIAdapter implements OAIAdapter {
             @Override
             public Element toXML() {
                 Element mods = new Element("mods", NS_MODS);
+                mods.addNamespaceDeclaration(NS_DDB);
+                mods.addNamespaceDeclaration(NS_DC);
                 mods.setAttribute("schemaLocation", SCHEMA_LOC_MODS, NS_XSI);
                 mods.addContent(new Element("note", NS_MODS).setText("sample note").setAttribute("attr", "sample"));
+                mods.addContent(new Element("title", NS_DC).setText("title").setAttribute("type", "ddb:titleISO639-2", NS_XSI));
                 return mods;
             }
         });

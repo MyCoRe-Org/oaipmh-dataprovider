@@ -19,7 +19,7 @@ public class OAIDataProviderTest {
         req.setArgument(Argument.identifier, oaiAdapter.modsRecord.getHeader().getId());
         req.setArgument(Argument.metadataPrefix, oaiAdapter.modsFormat.getPrefix());
         OAIResponse response = oaiProvider.handleRequest(req);
-        print(response);
+//        print(response);
     }
 
     @Test
@@ -57,7 +57,7 @@ public class OAIDataProviderTest {
         OAIXMLProvider oaiProvider = new JAXBOAIProvider(oaiAdapter);
         OAIRequest req = new OAIRequest(Verb.ListRecords.name());
         req.setArgument(Argument.metadataPrefix, oaiAdapter.modsFormat.getPrefix());
-        req.setArgument(Argument.until, "2010-09-09");
+        req.setArgument(Argument.until, "2010-11-11");
         OAIResponse response = oaiProvider.handleRequest(req);
 //        print(response);
     }
