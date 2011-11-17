@@ -19,7 +19,7 @@ public class OAIDataProviderTest {
         req.setArgument(Argument.identifier, oaiAdapter.modsRecord.getHeader().getId());
         req.setArgument(Argument.metadataPrefix, oaiAdapter.modsFormat.getPrefix());
         OAIResponse response = oaiProvider.handleRequest(req);
-//        print(response);
+        print(response);
     }
 
     @Test
