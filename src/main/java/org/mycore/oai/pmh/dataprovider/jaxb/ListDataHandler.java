@@ -1,6 +1,5 @@
 package org.mycore.oai.pmh.dataprovider.jaxb;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,8 +7,6 @@ import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.mycore.oai.pmh.Argument;
-import org.mycore.oai.pmh.DateUtils;
-import org.mycore.oai.pmh.Granularity;
 import org.mycore.oai.pmh.Header;
 import org.mycore.oai.pmh.OAIUtils;
 import org.mycore.oai.pmh.Record;
@@ -90,28 +87,6 @@ public abstract class ListDataHandler extends ListRequestsHandler {
             headerType.getSetSpec().add(set.getSpec());
         }
         return headerType;
-    }
-
-    protected Date getFrom(OAIRequest request) {
-        Date from = request.getFrom();
-        if(from == null) {
-            return null;
-        }
-        if(Granularity.YYYY_MM_DD_THH_MM_SS_Z.equals(this.oaiAdapter.getIdentify().getGranularity())) {
-            return from;
-        }
-        return DateUtils.startOfDay(from);
-    }
-
-    protected Date getUntil(OAIRequest request) {
-        Date until = request.getUntil();
-        if(until == null) {
-            return null;
-        }
-        if(Granularity.YYYY_MM_DD_THH_MM_SS_Z.equals(this.oaiAdapter.getIdentify().getGranularity())) {
-            return until;
-        }
-        return DateUtils.endOfDay(until);
     }
 
 }

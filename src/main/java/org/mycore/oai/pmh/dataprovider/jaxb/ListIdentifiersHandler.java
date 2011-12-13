@@ -28,7 +28,7 @@ public class ListIdentifiersHandler extends ListDataHandler {
             if (request.isSet()) {
                 set = this.oaiAdapter.getSet(request.getSet());
             }
-            headerList = this.oaiAdapter.getHeaders(format, set, getFrom(request), getUntil(request));
+            headerList = this.oaiAdapter.getHeaders(format, set, request.getFrom(), request.getUntilCalculated());
         }
 
         // create jaxb element

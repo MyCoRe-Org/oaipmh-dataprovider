@@ -50,14 +50,37 @@ public class OAIRequest {
         return metadataPrefix;
     }
 
+    public String getFromAsString() {
+        return this.from;
+    }
+    
+    public String getUntilAsString() {
+        return this.until;
+    }
+
     public Date getFrom() {
-        return DateUtils.parseUTC(from);
+        return DateUtils.parseUTC(this.from);
     }
 
     public Date getUntil() {
-        return DateUtils.parseUTC(until);
+        return DateUtils.parseUTC(this.until);
     }
 
+    public Date getUntilCalculated() {
+        if(this.until == null) {
+            return null;
+        }
+        try {
+            Granularity untilGranularity = DateUtils.getGranularity(this.until);
+            Date untilDate = DateUtils.parseUTC(this.until);
+            if(Granularity.YYYY_MM_DD.equals(untilGranularity)) {
+                return DateUtils.endOfDay(untilDate);
+            }
+            return untilDate;
+        } catch(ParseException pe) {
+            throw new OAIImplementationException("Unexpected error", pe);
+        }
+    }
     public String getResumptionToken() {
         return resumptionToken;
     }
