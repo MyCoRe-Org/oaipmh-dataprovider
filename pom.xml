@@ -1,13 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>mycore-parent</artifactId>
     <groupId>org.mycore</groupId>
-    <version>11-SNAPSHOT</version>
+    <version>13</version>
   </parent>
   <artifactId>oaipmh-dataprovider</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.1</version>
   <name>oaipmh-dataprovider</name>
 
   <properties>
@@ -15,9 +14,9 @@
   </properties>
 
   <scm>
-    <connection>scm:svn:http://server.mycore.de/svn/maven/${artifactId}/trunk</connection>
-    <developerConnection>scm:svn:https://server.mycore.de/svn/maven/${artifactId}/trunk</developerConnection>
-    <url>http://www.mycore.de/viewvc/viewvc.cgi/maven/${artifactId}/</url>
+    <connection>scm:svn:http://server.mycore.de/svn/maven/${artifactId}/tags/oaipmh-dataprovider-0.1</connection>
+    <developerConnection>scm:svn:https://server.mycore.de/svn/maven/${artifactId}/tags/oaipmh-dataprovider-0.1</developerConnection>
+    <url>http://www.mycore.de/viewvc/viewvc.cgi/maven/${artifactId}/tags/oaipmh-dataprovider-0.1</url>
   </scm>
   <repositories>
     <repository>
@@ -138,7 +137,7 @@
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>oaipmh</artifactId>
-      <version>0.1-SNAPSHOT</version>
+      <version>0.1</version>
     </dependency>
   </dependencies>
 </project>
