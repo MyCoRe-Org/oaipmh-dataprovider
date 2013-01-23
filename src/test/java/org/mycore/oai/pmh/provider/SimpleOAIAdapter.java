@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.jdom.Element;
-import org.jdom.Namespace;
+import org.jdom2.Element;
+import org.jdom2.Namespace;
 import org.mycore.oai.pmh.BadResumptionTokenException;
 import org.mycore.oai.pmh.CannotDisseminateFormatException;
 import org.mycore.oai.pmh.DefaultResumptionToken;

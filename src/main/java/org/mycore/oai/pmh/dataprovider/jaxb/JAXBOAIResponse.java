@@ -8,10 +8,10 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXHandler;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.sax.SAXHandler;
+import org.jdom2.output.XMLOutputter;
 import org.mycore.oai.pmh.OAIConstants;
 import org.mycore.oai.pmh.dataprovider.OAIImplementationException;
 import org.mycore.oai.pmh.dataprovider.OAIResponse;
@@ -70,7 +70,7 @@ public class JAXBOAIResponse implements OAIResponse {
     public String toString(Format format) {
         try {
             Element e = marshal();
-            XMLOutputter out = new XMLOutputter(Format.formatted.equals(format) ? org.jdom.output.Format.getPrettyFormat() : org.jdom.output.Format.getRawFormat());
+            XMLOutputter out = new XMLOutputter(Format.formatted.equals(format) ? org.jdom2.output.Format.getPrettyFormat() : org.jdom2.output.Format.getRawFormat());
             StringWriter writer = new StringWriter();
             out.output(e, writer);
             return writer.toString();

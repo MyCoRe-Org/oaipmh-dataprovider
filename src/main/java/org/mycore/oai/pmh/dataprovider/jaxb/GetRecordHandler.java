@@ -3,8 +3,8 @@ package org.mycore.oai.pmh.dataprovider.jaxb;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jdom.Document;
-import org.jdom.output.DOMOutputter;
+import org.jdom2.Document;
+import org.jdom2.output.DOMOutputter;
 import org.mycore.oai.pmh.Argument;
 import org.mycore.oai.pmh.Metadata;
 import org.mycore.oai.pmh.MetadataFormat;

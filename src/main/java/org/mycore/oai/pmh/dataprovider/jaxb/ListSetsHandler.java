@@ -3,7 +3,7 @@ package org.mycore.oai.pmh.dataprovider.jaxb;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.mycore.oai.pmh.Argument;
 import org.mycore.oai.pmh.Description;
 import org.mycore.oai.pmh.OAIDataList;

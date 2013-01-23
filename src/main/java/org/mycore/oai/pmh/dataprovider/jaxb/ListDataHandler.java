@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.jdom.Element;
-import org.jdom.JDOMException;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
 import org.mycore.oai.pmh.Argument;
 import org.mycore.oai.pmh.Header;
 import org.mycore.oai.pmh.OAIUtils;
