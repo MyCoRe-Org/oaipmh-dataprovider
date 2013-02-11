@@ -10,13 +10,13 @@
   <name>oaipmh-dataprovider</name>
 
   <properties>
-    <java.target.version>1.6</java.target.version>
+    <java.target.version>1.7</java.target.version>
   </properties>
 
   <scm>
-    <connection>scm:svn:http://server.mycore.de/svn/maven/oaipmh-dataprovider/trunk</connection>
-    <developerConnection>scm:svn:https://server.mycore.de/svn/maven/oaipmh-dataprovider/trunk</developerConnection>
-    <url>http://www.mycore.de/viewvc/viewvc.cgi/maven/oaipmh-dataprovider/</url>
+    <connection>scm:svn:http://server.mycore.de/svn/maven/${project.artifactId}/trunk</connection>
+    <developerConnection>scm:svn:https://server.mycore.de/svn/maven/${project.artifactId}/trunk</developerConnection>
+    <url>http://www.mycore.de/viewvc/viewvc.cgi/maven/${project.artifactId}/</url>
   </scm>
   <repositories>
     <repository>
@@ -70,14 +70,6 @@
     </pluginManagement>
 
     <plugins>
-      <!-- Plugin for compiling with 1.6 -->
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
-      </plugin>
       <!-- Plugin for generating sources of xml schema files -->
       <plugin>
         <groupId>org.jvnet.jaxb2.maven2</groupId>
@@ -98,7 +90,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
-        <version>1.7</version>
         <executions>
           <execution>
             <id>add-source</id>
@@ -114,6 +105,20 @@
           </execution>
         </executions>
       </plugin>
+      <!-- Generate *-source.jar -->
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>attach-sources</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>jar-no-fork</goal>
+                <goal>test-jar-no-fork</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
     </plugins>
   </build>
 
