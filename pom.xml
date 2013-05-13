@@ -6,7 +6,7 @@
     <version>13</version>
   </parent>
   <artifactId>oaipmh-dataprovider</artifactId>
-  <version>0.2-SNAPSHOT</version>
+  <version>0.2</version>
   <name>oaipmh-dataprovider</name>
 
   <properties>
@@ -14,9 +14,9 @@
   </properties>
 
   <scm>
-    <connection>scm:svn:http://server.mycore.de/svn/maven/${project.artifactId}/trunk</connection>
-    <developerConnection>scm:svn:https://server.mycore.de/svn/maven/${project.artifactId}/trunk</developerConnection>
-    <url>http://www.mycore.de/viewvc/viewvc.cgi/maven/${project.artifactId}/</url>
+    <connection>scm:svn:http://server.mycore.de/svn/maven/${project.artifactId}/tags/oaipmh-dataprovider-0.2</connection>
+    <developerConnection>scm:svn:https://server.mycore.de/svn/maven/${project.artifactId}/tags/oaipmh-dataprovider-0.2</developerConnection>
+    <url>http://www.mycore.de/viewvc/viewvc.cgi/maven/${project.artifactId}/tags/oaipmh-dataprovider-0.2</url>
   </scm>
   <repositories>
     <repository>
@@ -142,7 +142,7 @@
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>oaipmh</artifactId>
-      <version>0.2-SNAPSHOT</version>
+      <version>0.2</version>
     </dependency>
   </dependencies>
 </project>
