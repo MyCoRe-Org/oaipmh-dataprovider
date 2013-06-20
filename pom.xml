@@ -99,7 +99,7 @@
             </goals>
             <configuration>
               <sources>
-                <source>${basedir}/target/generated-sources/xjc</source>
+                <source>${project.build.sourceDirectory}/xjc</source>
               </sources>
             </configuration>
           </execution>
