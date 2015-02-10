@@ -15,6 +15,7 @@ import org.mycore.oai.pmh.BadArgumentException.Type;
 import org.mycore.oai.pmh.Granularity;
 import org.mycore.oai.pmh.Identify;
 import org.mycore.oai.pmh.DateUtils;
+import org.mycore.oai.pmh.NoRecordsMatchException;
 import org.mycore.oai.pmh.OAIIdentifierDescription;
 import org.mycore.oai.pmh.OAIUtils;
 
@@ -179,7 +180,7 @@ public class OAIRequest {
      * @param argMap map of valid arguments and argument types of the current verb
      * @throws BadArgumentException if the request contains a bad argument
      */
-    public void checkBadArgument(Map<Argument, ArgumentType> argMap, OAIAdapter oaiAdapter) throws BadArgumentException {
+    public void checkBadArgument(Map<Argument, ArgumentType> argMap, OAIAdapter oaiAdapter) throws BadArgumentException, NoRecordsMatchException {
         if(this.badArgumentException != null) {
             throw this.badArgumentException;
         }
@@ -235,12 +236,12 @@ public class OAIRequest {
                 earliestDatestamp = DateUtils.startOfDay(earliestDatestamp);
             }
             if(until.compareTo(earliestDatestamp) < 0) {
-                throw new BadArgumentException("The until date must be greater or equal the earliest data stamp!");
+                throw new NoRecordsMatchException().setMessage("The until date must be greater or equal the earliest data stamp!");
             }
         }
         if(from != null && until != null) {
             if(from.compareTo(until) > 0) {
-                throw new BadArgumentException("The from date must be less or equal the until date!");
+                throw new NoRecordsMatchException().setMessage("The from date must be less or equal the until date!");
             }
             try {
                 Granularity fromG = DateUtils.getGranularity(this.from);

@@ -5,6 +5,7 @@ import java.util.Date;
 import org.mycore.oai.pmh.BadArgumentException;
 import org.mycore.oai.pmh.BadVerbException;
 import org.mycore.oai.pmh.DateUtils;
+import org.mycore.oai.pmh.NoRecordsMatchException;
 import org.mycore.oai.pmh.OAIException;
 import org.mycore.oai.pmh.OAIException.ErrorCode;
 import org.mycore.oai.pmh.Verb;
@@ -63,6 +64,8 @@ public class JAXBOAIProvider implements OAIXMLProvider {
             request.checkBadArgument(verbHandler.getArgumentMap(), this.getAdapter());
         } catch (BadArgumentException bae) {
             return getErrorResponse(bae, request);
+        } catch (NoRecordsMatchException nrme) {
+            return getErrorResponse(nrme, request);
         }
         // handle request
         try {
