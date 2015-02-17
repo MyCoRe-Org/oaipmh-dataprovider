@@ -3,16 +3,18 @@
   <parent>
     <artifactId>mycore-parent</artifactId>
     <groupId>org.mycore</groupId>
-    <version>16-SNAPSHOT</version>
+    <version>24-SNAPSHOT</version>
   </parent>
   <artifactId>oaipmh-dataprovider</artifactId>
   <version>0.4-SNAPSHOT</version>
   <name>oaipmh-dataprovider</name>
-
   <properties>
     <java.target.version>1.7</java.target.version>
   </properties>
-
+  <issueManagement>
+    <system>JIRA</system>
+    <url>https://mycore.atlassian.net/browse/OAIDP</url>
+  </issueManagement>
   <scm>
     <connection>scm:svn:http://server.mycore.de/svn/maven/${project.artifactId}/trunk</connection>
     <developerConnection>scm:svn:https://server.mycore.de/svn/maven/${project.artifactId}/trunk</developerConnection>
@@ -37,7 +39,6 @@
       </snapshots>
     </repository>
   </repositories>
-
   <build>
     <!-- lifecycle mapping for m2eclipse @see http://wiki.eclipse.org/M2E_plugin_execution_not_covered -->
     <pluginManagement>
