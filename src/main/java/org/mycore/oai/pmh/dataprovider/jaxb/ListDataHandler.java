@@ -3,7 +3,8 @@ package org.mycore.oai.pmh.dataprovider.jaxb;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.mycore.oai.pmh.Argument;
@@ -23,7 +24,7 @@ import org.openarchives.oai.pmh.StatusType;
 
 public abstract class ListDataHandler extends ListRequestsHandler {
 
-    protected final static Logger LOGGER = Logger.getLogger(ListDataHandler.class);
+    protected final static Logger LOGGER = LogManager.getLogger(ListDataHandler.class);
     
     private static Map<Argument, ArgumentType> argumentMap = null;
     static {

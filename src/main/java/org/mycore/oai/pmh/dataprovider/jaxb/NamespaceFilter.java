@@ -1,6 +1,7 @@
 package org.mycore.oai.pmh.dataprovider.jaxb;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.XMLFilterImpl;
@@ -19,7 +20,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  */
 public class NamespaceFilter extends XMLFilterImpl {
 
-    private static Logger LOGGER = Logger.getLogger(NamespaceFilter.class);
+    private static Logger LOGGER = LogManager.getLogger(NamespaceFilter.class);
 
     private String xmlns = "";
 
