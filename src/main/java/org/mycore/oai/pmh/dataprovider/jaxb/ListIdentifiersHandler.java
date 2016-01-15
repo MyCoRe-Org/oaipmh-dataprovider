@@ -35,7 +35,7 @@ public class ListIdentifiersHandler extends ListDataHandler {
         ListIdentifiersType listIdentifiersType = new ListIdentifiersType();
         // add headers
         for (Header header : headerList) {
-            listIdentifiersType.getHeader().add(toJAXBHeader(header));
+            listIdentifiersType.getHeader().add(JAXBUtils.toJAXBHeader(header, this.oaiAdapter.getIdentify()));
         }
         // set resumption token
         if (headerList.isResumptionTokenSet()) {

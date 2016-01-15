@@ -35,7 +35,7 @@ public class ListRecordsHandler extends ListDataHandler {
         ListRecordsType listRecordsType = new ListRecordsType();
         // add records
         for (Record record : recordList) {
-            listRecordsType.getRecord().add(toJAXBRecord(record));
+            listRecordsType.getRecord().add(JAXBUtils.toJAXBRecord(record, this.oaiAdapter.getIdentify()));
         }
         // set resumption token
         if (recordList.isResumptionTokenSet()) {
