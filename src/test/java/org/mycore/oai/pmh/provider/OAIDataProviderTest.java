@@ -19,7 +19,7 @@ public class OAIDataProviderTest {
         req.setArgument(Argument.identifier, oaiAdapter.modsRecord.getHeader().getId());
         req.setArgument(Argument.metadataPrefix, oaiAdapter.modsFormat.getPrefix());
         OAIResponse response = oaiProvider.handleRequest(req);
-//        print(response);
+        //        print(response);
     }
 
     @Test
@@ -28,7 +28,7 @@ public class OAIDataProviderTest {
         OAIXMLProvider oaiProvider = new JAXBOAIProvider(oaiAdapter);
         OAIRequest req = new OAIRequest(Verb.Identify.name());
         OAIResponse response = oaiProvider.handleRequest(req);
-//      print(response);
+        //      print(response);
     }
 
     @Test
@@ -39,7 +39,7 @@ public class OAIDataProviderTest {
         req.setArgument(Argument.metadataPrefix, oaiAdapter.modsFormat.getPrefix());
         req.setArgument(Argument.set, oaiAdapter.set1.getSpec());
         OAIResponse response = oaiProvider.handleRequest(req);
-//        print(response);
+        //        print(response);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class OAIDataProviderTest {
         OAIXMLProvider oaiProvider = new JAXBOAIProvider(oaiAdapter);
         OAIRequest req = new OAIRequest(Verb.ListMetadataFormats.name());
         OAIResponse response = oaiProvider.handleRequest(req);
-//        print(response);
+        //        print(response);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class OAIDataProviderTest {
         req.setArgument(Argument.metadataPrefix, oaiAdapter.modsFormat.getPrefix());
         req.setArgument(Argument.until, "2010-11-11");
         OAIResponse response = oaiProvider.handleRequest(req);
-//        print(response);
+        //        print(response);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class OAIDataProviderTest {
         OAIXMLProvider oaiProvider = new JAXBOAIProvider(oaiAdapter);
         OAIRequest req = new OAIRequest(Verb.ListSets.name());
         OAIResponse response = oaiProvider.handleRequest(req);
-//        print(response);
+        //        print(response);
     }
 
     private void print(OAIResponse response) throws Exception {

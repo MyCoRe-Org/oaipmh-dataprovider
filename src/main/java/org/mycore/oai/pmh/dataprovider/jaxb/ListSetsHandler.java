@@ -38,7 +38,7 @@ public class ListSetsHandler extends ListRequestsHandler {
 
     @Override
 	public OAIPMHtype handle(OAIRequest request) throws OAIException {
-	    OAIDataList<Set> setList;
+	    OAIDataList<? extends Set> setList;
 	    if(request.isResumptionToken()) {
 	        setList = this.oaiAdapter.getSets(request.getResumptionToken());
 	    } else {

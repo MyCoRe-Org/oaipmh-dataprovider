@@ -1,33 +1,34 @@
 package org.mycore.oai.pmh.provider;
 
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.mycore.oai.pmh.BadResumptionTokenException;
 import org.mycore.oai.pmh.CannotDisseminateFormatException;
+import org.mycore.oai.pmh.DateUtils;
 import org.mycore.oai.pmh.DefaultResumptionToken;
+import org.mycore.oai.pmh.Description;
 import org.mycore.oai.pmh.FriendsDescription;
 import org.mycore.oai.pmh.Granularity;
 import org.mycore.oai.pmh.Header;
+import org.mycore.oai.pmh.Header.Status;
 import org.mycore.oai.pmh.IdDoesNotExistException;
 import org.mycore.oai.pmh.Identify;
+import org.mycore.oai.pmh.Identify.DeletedRecordPolicy;
 import org.mycore.oai.pmh.Metadata;
 import org.mycore.oai.pmh.MetadataFormat;
 import org.mycore.oai.pmh.NoMetadataFormatsException;
 import org.mycore.oai.pmh.NoRecordsMatchException;
 import org.mycore.oai.pmh.NoSetHierarchyException;
 import org.mycore.oai.pmh.OAIDataList;
-import org.mycore.oai.pmh.DateUtils;
 import org.mycore.oai.pmh.OAIIdentifierDescription;
 import org.mycore.oai.pmh.Record;
 import org.mycore.oai.pmh.ResumptionToken;
 import org.mycore.oai.pmh.Set;
-import org.mycore.oai.pmh.Header.Status;
-import org.mycore.oai.pmh.Identify.DeletedRecordPolicy;
-import org.mycore.oai.pmh.SimpleResumptionToken;
+import org.mycore.oai.pmh.SimpleIdentify;
 import org.mycore.oai.pmh.dataprovider.OAIAdapter;
 import org.mycore.oai.pmh.dc.DCMetadataFormat;
 
@@ -38,9 +39,9 @@ public class SimpleOAIAdapter implements OAIAdapter {
     private static final Namespace NS_XSI = Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
     private static final Namespace NS_MODS = Namespace.getNamespace("mods", "http://www.loc.gov/mods/v3");
-    
+
     private static final Namespace NS_DC = Namespace.getNamespace("dc", "http://purl.org/dc/elements/1.1/");
-    
+
     private static final Namespace NS_DDB = Namespace.getNamespace("ddb", "http://www.d-nb.de/standards/ddb/");
 
     public Identify id;
@@ -61,9 +62,10 @@ public class SimpleOAIAdapter implements OAIAdapter {
         // set id
         String reposName = "Test OAI Provider";
         String baseURL = "www.mycore.de";
-        Date earliestDate = DateUtils.parseUTC("2010-10-10");
+        Instant earliestDate = DateUtils.parse("2010-10-10");
         String adminMail = "sampleuser@bugmenot.de";
-        this.id = new SimpleTestIdentify(reposName, baseURL, earliestDate, DeletedRecordPolicy.No, Granularity.YYYY_MM_DD_THH_MM_SS_Z, adminMail);
+        this.id = new SimpleTestIdentify(reposName, baseURL, earliestDate, DeletedRecordPolicy.No,
+            Granularity.YYYY_MM_DD_THH_MM_SS_Z, adminMail);
         this.id.getDescriptionList().add(new OAIIdentifierDescription("sample.de", "sampleobject"));
         this.id.getDescriptionList().add(new FriendsDescription("www.spiegel.de", "www.golem.de"));
         // sets
@@ -77,7 +79,7 @@ public class SimpleOAIAdapter implements OAIAdapter {
         this.metadataFormatList.add(this.dcFormat);
         this.metadataFormatList.add(this.modsFormat);
         // mods record
-        this.modsRecord = new Record("oai:sample.de:modsrecord", DateUtils.parseUTC("2010-10-12"), new Metadata() {
+        this.modsRecord = new Record("oai:sample.de:modsrecord", DateUtils.parse("2010-10-12"), new Metadata() {
             @Override
             public Element toXML() {
                 Element mods = new Element("mods", NS_MODS);
@@ -85,12 +87,14 @@ public class SimpleOAIAdapter implements OAIAdapter {
                 mods.addNamespaceDeclaration(NS_DC);
                 mods.setAttribute("schemaLocation", SCHEMA_LOC_MODS, NS_XSI);
                 mods.addContent(new Element("note", NS_MODS).setText("sample note").setAttribute("attr", "sample"));
-                mods.addContent(new Element("title", NS_DC).setText("title").setAttribute("type", "ddb:titleISO639-2", NS_XSI));
+                mods.addContent(
+                    new Element("title", NS_DC).setText("title").setAttribute("type", "ddb:titleISO639-2", NS_XSI));
                 return mods;
             }
         });
         this.modsRecord.getHeader().getSetList().add(set1);
-        this.deletedRecord = new Record("oai:sample.de:deletedrecord", DateUtils.parseUTC("2009-11-11"), Status.deleted);
+        this.deletedRecord = new Record("oai:sample.de:deletedrecord", DateUtils.parse("2009-11-11"),
+            Status.deleted);
         this.recordList.add(this.modsRecord);
         this.recordList.add(this.deletedRecord);
     }
@@ -106,9 +110,9 @@ public class SimpleOAIAdapter implements OAIAdapter {
     }
 
     @Override
-    public Set getSet(String setSpec) throws NoRecordsMatchException{
-        for(Set s : this.setList) {
-            if(s.getSpec().equals(setSpec)) {
+    public Set getSet(String setSpec) throws NoRecordsMatchException {
+        for (Set s : this.setList) {
+            if (s.getSpec().equals(setSpec)) {
                 return s;
             }
         }
@@ -116,7 +120,8 @@ public class SimpleOAIAdapter implements OAIAdapter {
     }
 
     @Override
-    public OAIDataList<Set> getSets(String resumptionToken) throws NoSetHierarchyException, BadResumptionTokenException {
+    public OAIDataList<Set> getSets(String resumptionToken)
+        throws NoSetHierarchyException, BadResumptionTokenException {
         throw new BadResumptionTokenException(resumptionToken);
     }
 
@@ -136,7 +141,8 @@ public class SimpleOAIAdapter implements OAIAdapter {
     }
 
     @Override
-    public List<MetadataFormat> getMetadataFormats(String identifier) throws IdDoesNotExistException, NoMetadataFormatsException {
+    public List<MetadataFormat> getMetadataFormats(String identifier)
+        throws IdDoesNotExistException, NoMetadataFormatsException {
         OAIDataList<MetadataFormat> fList = new OAIDataList<MetadataFormat>();
         for (MetadataFormat f : this.metadataFormatList) {
             try {
@@ -150,7 +156,8 @@ public class SimpleOAIAdapter implements OAIAdapter {
     }
 
     @Override
-    public Record getRecord(String identifier, MetadataFormat format) throws CannotDisseminateFormatException, IdDoesNotExistException {
+    public Record getRecord(String identifier, MetadataFormat format)
+        throws CannotDisseminateFormatException, IdDoesNotExistException {
         Record r = getRecord(identifier);
         if (r.equals(this.modsRecord) && !format.equals(modsFormat)) {
             CannotDisseminateFormatException cdf = new CannotDisseminateFormatException();
@@ -175,8 +182,8 @@ public class SimpleOAIAdapter implements OAIAdapter {
     }
 
     @Override
-    public OAIDataList<Record> getRecords(MetadataFormat format, Set set, Date from, Date until) throws CannotDisseminateFormatException,
-            NoSetHierarchyException, NoRecordsMatchException {
+    public OAIDataList<Record> getRecords(MetadataFormat format, Set set, Instant from, Instant until)
+        throws CannotDisseminateFormatException, NoSetHierarchyException, NoRecordsMatchException {
         if (!(format.equals(modsFormat) || format.equals(dcFormat))) {
             throw new CannotDisseminateFormatException().setMetadataPrefix(format.getPrefix());
         }
@@ -195,8 +202,8 @@ public class SimpleOAIAdapter implements OAIAdapter {
     }
 
     @Override
-    public OAIDataList<Header> getHeaders(MetadataFormat format, Set set, Date from, Date until) throws CannotDisseminateFormatException,
-            NoSetHierarchyException, NoRecordsMatchException {
+    public OAIDataList<Header> getHeaders(MetadataFormat format, Set set, Instant from, Instant until)
+        throws CannotDisseminateFormatException, NoSetHierarchyException, NoRecordsMatchException {
         if (!(format.equals(modsFormat) || format.equals(dcFormat))) {
             throw new CannotDisseminateFormatException().setMetadataPrefix(format.getPrefix());
         }
@@ -226,6 +233,23 @@ public class SimpleOAIAdapter implements OAIAdapter {
     @Override
     public OAIDataList<Header> getHeaders(String resumptionToken) throws BadResumptionTokenException {
         throw new BadResumptionTokenException(resumptionToken);
+    }
+
+    private static class SimpleTestIdentify extends SimpleIdentify {
+
+        public SimpleTestIdentify(String repositoryName, String baseURL, Instant earliestDatestamp,
+            DeletedRecordPolicy delRecPol, Granularity granularity, String adminMail) {
+            this.repositoryName = repositoryName;
+            this.baseURL = baseURL;
+            this.earliestDatestamp = earliestDatestamp;
+            this.deletedRecordPolicy = delRecPol;
+            this.granularity = granularity;
+            this.protocolVersion = "2.0";
+            this.adminEmailList = new ArrayList<String>();
+            this.adminEmailList.add(adminMail);
+            this.descriptionList = new ArrayList<Description>();
+        }
+
     }
 
 }

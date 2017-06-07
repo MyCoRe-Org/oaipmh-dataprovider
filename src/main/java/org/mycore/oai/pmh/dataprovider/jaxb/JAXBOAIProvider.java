@@ -1,6 +1,6 @@
 package org.mycore.oai.pmh.dataprovider.jaxb;
 
-import java.util.Date;
+import java.time.Instant;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -147,8 +147,8 @@ public class JAXBOAIProvider implements OAIXMLProvider {
         return error;
     }
 
-    protected Date getResponseDate() {
-        return DateUtils.getCurrentDate();
+    protected Instant getResponseDate() {
+        return Instant.now();
     }
 
     @Override

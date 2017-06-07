@@ -39,7 +39,7 @@ public class ListMetadataFormatsHandler extends JAXBVerbHandler {
     @Override
     public OAIPMHtype handle(OAIRequest request) throws OAIException {
         String id = request.getIdentifier();
-        List<MetadataFormat> formatList;
+        List<? extends MetadataFormat> formatList;
         // get format list
         if (id == null) {
             // get all metadata formats
@@ -74,7 +74,7 @@ public class ListMetadataFormatsHandler extends JAXBVerbHandler {
      *            list of metadata formats
      * @return true if list contains dublic core format
      */
-    private boolean checkOAIDublinCore(List<MetadataFormat> formatList) {
+    private boolean checkOAIDublinCore(List<? extends MetadataFormat> formatList) {
         for (MetadataFormat f : formatList) {
             if (f.getNamespace().equals(OAIConstants.NS_OAI_DC.getURI()))
                 return true;
