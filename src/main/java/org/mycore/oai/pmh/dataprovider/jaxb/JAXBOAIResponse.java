@@ -48,7 +48,7 @@ public class JAXBOAIResponse implements OAIResponse {
             SAXHandler saxHandler = new SAXHandler();
             outFilter.setContentHandler(saxHandler);
             Marshaller marshaller = createMarshaller();
-            marshaller.marshal(new JAXBElement<OAIPMHtype>(new QName(OAIConstants.NS_OAI.getURI(), OAIConstants.XML_OAI_ROOT), OAIPMHtype.class,
+            marshaller.marshal(new JAXBElement<>(new QName(OAIConstants.NS_OAI.getURI(), OAIConstants.XML_OAI_ROOT), OAIPMHtype.class,
                     this.oaipmh), outFilter);
             return saxHandler.getDocument().detachRootElement();
         } catch (Exception exc) {

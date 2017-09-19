@@ -91,7 +91,7 @@ public class OAIRequest {
     /**
      * Creates a new oai request by verb.
      * 
-     * @param verb
+     * @param verb the request verb
      */
     public OAIRequest(String verb) {
         this.verb = verb;
@@ -130,7 +130,6 @@ public class OAIRequest {
             Set<String> set = parameterMap.keySet();
             // is temporary stored until checkBadArgument is called
             this.badArgumentException = new BadArgumentException(Type.invalid, set.toArray(new String[set.size()]));
-            return;
         }
     }
 
@@ -190,7 +189,7 @@ public class OAIRequest {
                 throw new BadArgumentException(Type.invalid, requestArgument.toString());
         }
         // check required && exclusive arguments
-        List<Argument> missingArgumentList = new ArrayList<Argument>();
+        List<Argument> missingArgumentList = new ArrayList<>();
         Argument exclusiveArgument = null;
         for (Map.Entry<Argument, ArgumentType> entry : argMap.entrySet()) {
             Argument arg = entry.getKey();
@@ -208,7 +207,7 @@ public class OAIRequest {
         // exclusive
         if (exclusiveArgument != null) {
             if (requestArgCollection.size() != 1) {
-                ArrayList<Argument> tempList = new ArrayList<Argument>(requestArgCollection);
+                ArrayList<Argument> tempList = new ArrayList<>(requestArgCollection);
                 tempList.remove(exclusiveArgument);
                 throw new BadArgumentException(Type.invalid, toStringArray(tempList));
             }
@@ -280,7 +279,7 @@ public class OAIRequest {
     }
 
     private Map<Argument, String> getArguments() {
-        Map<Argument, String> argumentList = new HashMap<Argument, String>();
+        Map<Argument, String> argumentList = new HashMap<>();
         if (isIdentifier())
             argumentList.put(Argument.identifier, this.identifier);
         if (isMetadataPrefix())
@@ -298,12 +297,12 @@ public class OAIRequest {
 
     @Override
     public String toString() {
-        StringBuffer b = new StringBuffer();
-        b.append("verb: " + this.verb).append("; ");
+        StringBuilder builder = new StringBuilder();
+        builder.append("verb: ").append(this.verb).append("; ");
         for (Map.Entry<Argument, String> entry : getArguments().entrySet()) {
-            b.append(entry.getKey().name()).append(": ").append(entry.getValue()).append("; ");
+            builder.append(entry.getKey().name()).append(": ").append(entry.getValue()).append("; ");
         }
-        return b.toString();
+        return builder.toString();
     }
 
     /**

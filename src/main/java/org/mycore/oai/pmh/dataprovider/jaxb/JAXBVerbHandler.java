@@ -10,6 +10,9 @@ import org.mycore.oai.pmh.dataprovider.OAIRequest.ArgumentType;
 import org.mycore.oai.pmh.dataprovider.VerbHandler;
 import org.openarchives.oai.pmh.OAIPMHtype;
 
+/**
+ * Base class to handle all OAI-PMH verbs.
+ */
 public abstract class JAXBVerbHandler implements VerbHandler<OAIPMHtype> {
 
     protected OAIAdapter oaiAdapter;
@@ -19,7 +22,9 @@ public abstract class JAXBVerbHandler implements VerbHandler<OAIPMHtype> {
     }
 
     /**
-     * @param request
+     * Handles the request.
+     *
+     * @param request the request to handle
      */
     public abstract OAIPMHtype handle(OAIRequest request) throws OAIException;
 

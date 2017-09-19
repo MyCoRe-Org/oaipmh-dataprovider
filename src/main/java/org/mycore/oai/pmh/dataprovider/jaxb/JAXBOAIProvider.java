@@ -51,8 +51,8 @@ public class JAXBOAIProvider implements OAIXMLProvider {
         // set global granularity
         DateUtils.setGranularity(this.getAdapter().getIdentify().getGranularity());
         // check verb
-        JAXBVerbHandler verbHandler = null;
-        Verb verb = null;
+        JAXBVerbHandler verbHandler;
+        Verb verb;
         try {
             verb = Verb.valueOf(request.getVerb());
         } catch (Exception exc) {
@@ -76,10 +76,8 @@ public class JAXBOAIProvider implements OAIXMLProvider {
         // check arguments
         try {
             request.checkBadArgument(verbHandler.getArgumentMap(), this.getAdapter());
-        } catch (BadArgumentException bae) {
-            return getErrorResponse(bae, request);
-        } catch (NoRecordsMatchException nrme) {
-            return getErrorResponse(nrme, request);
+        } catch (BadArgumentException | NoRecordsMatchException exc) {
+            return getErrorResponse(exc, request);
         }
         // handle request
         try {

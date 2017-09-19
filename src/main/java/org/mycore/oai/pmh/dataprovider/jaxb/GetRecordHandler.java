@@ -23,7 +23,7 @@ public class GetRecordHandler extends JAXBVerbHandler {
     private static Map<Argument, ArgumentType> argumentMap = null;
 
     static {
-        argumentMap = new HashMap<Argument, OAIRequest.ArgumentType>();
+        argumentMap = new HashMap<>();
         argumentMap.put(Argument.identifier, ArgumentType.required);
         argumentMap.put(Argument.metadataPrefix, ArgumentType.required);
     }

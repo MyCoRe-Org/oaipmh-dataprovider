@@ -8,8 +8,8 @@ import org.mycore.oai.pmh.dataprovider.OAIRequest.ArgumentType;
 
 public interface VerbHandler<Verb> {
 
-    public Verb handle(OAIRequest request) throws OAIException;
+    Verb handle(OAIRequest request) throws OAIException;
 
-    public Map<Argument, ArgumentType> getArgumentMap();
+    Map<Argument, ArgumentType> getArgumentMap();
 
 }

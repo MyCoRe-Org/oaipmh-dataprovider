@@ -10,7 +10,7 @@ import org.jdom2.JDOMException;
  */
 public interface OAIResponse {
 
-    public enum Format {
+    enum Format {
         unformatted, formatted
     }
 
@@ -20,14 +20,14 @@ public interface OAIResponse {
      * @return oai pmh as jdom
      * @throws JDOMException if a parsing exception occur
      */
-    public Element toXML() throws JDOMException;
+    Element toXML() throws JDOMException;
 
     /**
      * Returns the oai pmh xml as unformatted text.
      * 
      * @return oai pmh response as string
      */
-    public String toString();
+    String toString();
 
     /**
      * Returns the oai pmh xml as formatted text.
@@ -35,6 +35,6 @@ public interface OAIResponse {
      * @param format format of the text
      * @return oai pmh response as string
      */
-    public String toString(Format format);
+    String toString(Format format);
 
 }

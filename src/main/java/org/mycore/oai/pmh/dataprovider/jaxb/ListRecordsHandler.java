@@ -18,7 +18,7 @@ public class ListRecordsHandler extends ListDataHandler {
 
     @Override
     public OAIPMHtype handle(OAIRequest request) throws OAIException {
-        OAIDataList<? extends Record> recordList = null;
+        OAIDataList<? extends Record> recordList;
         // get header list from oai adapter
         if (request.isResumptionToken()) {
             recordList = this.oaiAdapter.getRecords(request.getResumptionToken());

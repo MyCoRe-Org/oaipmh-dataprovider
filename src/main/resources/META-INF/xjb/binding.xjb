@@ -11,7 +11,7 @@
   <jaxb:globalBindings >
     <jaxb:javaType name="java.time.Instant" xmlType="xs:dateTime"
       parseMethod="org.mycore.oai.pmh.DateUtils.parse"
-      printMethod="org.mycore.oai.pmh.DateUtils.format" />
+      printMethod="org.mycore.oai.pmh.DateUtils.formatUTCSecond" />
     <jaxb:javaType name="java.time.Instant" xmlType="oai:UTCdatetimeType"
       parseMethod="org.mycore.oai.pmh.DateUtils.parse"
       printMethod="org.mycore.oai.pmh.DateUtils.format" />

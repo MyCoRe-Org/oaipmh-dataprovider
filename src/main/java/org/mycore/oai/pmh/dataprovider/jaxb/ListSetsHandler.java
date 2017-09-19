@@ -23,7 +23,7 @@ public class ListSetsHandler extends ListRequestsHandler {
 
     private static Map<Argument, ArgumentType> argumentMap = null;
     static {
-        argumentMap = new HashMap<Argument, OAIRequest.ArgumentType>();
+        argumentMap = new HashMap<>();
         argumentMap.put(Argument.resumptionToken, ArgumentType.exclusive);
     }
 

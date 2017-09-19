@@ -28,7 +28,7 @@ public interface OAIAdapter {
      * 
      * @return {@link Identify}
      */
-    public Identify getIdentify();
+    Identify getIdentify();
 
     /**
      * Returns a list of {@link Set}s.
@@ -37,7 +37,7 @@ public interface OAIAdapter {
      * @throws NoSetHierarchyException
      *             The repository does not support sets.
      */
-    public OAIDataList<? extends Set> getSets() throws NoSetHierarchyException;
+    OAIDataList<? extends Set> getSets() throws NoSetHierarchyException;
 
     /**
      * Returns a list of {@link Set}s.
@@ -50,7 +50,7 @@ public interface OAIAdapter {
      * @throws BadResumptionTokenException
      *             The value of the resumptionToken argument is invalid or expired.
      */
-    public OAIDataList<? extends Set> getSets(String resumptionToken) throws NoSetHierarchyException, BadResumptionTokenException;
+    OAIDataList<? extends Set> getSets(String resumptionToken) throws NoSetHierarchyException, BadResumptionTokenException;
 
     /**
      * Returns the {@link Set} by the given setSpec. If no set is found a {@link NoRecordsMatchException} is thrown.
@@ -63,7 +63,7 @@ public interface OAIAdapter {
      * @throws NoRecordsMatchException
      *             No set matches the setSpec parameter.
      */
-    public Set getSet(String setSpec) throws NoSetHierarchyException, NoRecordsMatchException;
+    Set getSet(String setSpec) throws NoSetHierarchyException, NoRecordsMatchException;
 
     /**
      * Returns a list of metadata formats available in the repository. Be aware that the oai_dc format is <a
@@ -71,7 +71,7 @@ public interface OAIAdapter {
      * 
      * @return metadata formats available from the repository
      */
-    public List<? extends MetadataFormat> getMetadataFormats();
+    List<? extends MetadataFormat> getMetadataFormats();
 
     /**
      * Returns the metadata format by prefix.
@@ -82,7 +82,7 @@ public interface OAIAdapter {
      * @throws CannotDisseminateFormatException
      *             The metadata prefix argument is not supported by the repository.
      */
-    public MetadataFormat getMetadataFormat(String prefix) throws CannotDisseminateFormatException;
+    MetadataFormat getMetadataFormat(String prefix) throws CannotDisseminateFormatException;
 
     /**
      * Returns a list of metadata formats available in the repository.
@@ -97,7 +97,7 @@ public interface OAIAdapter {
      * @throws NoMetadataFormatsException
      *             There are no metadata formats available for the specified item.
      */
-    public List<? extends MetadataFormat> getMetadataFormats(String identifier)
+    List<? extends MetadataFormat> getMetadataFormats(String identifier)
         throws IdDoesNotExistException, NoMetadataFormatsException;
 
     /**
@@ -113,7 +113,7 @@ public interface OAIAdapter {
      * @throws IdDoesNotExistException
      *             The value of the identifier argument is unknown or illegal in this repository.
      */
-    public Record getRecord(String identifier, MetadataFormat format)
+    Record getRecord(String identifier, MetadataFormat format)
         throws CannotDisseminateFormatException, IdDoesNotExistException;
 
     /**
@@ -125,7 +125,7 @@ public interface OAIAdapter {
      * @throws BadResumptionTokenException
      *             The value of the resumptionToken argument is invalid or expired.
      */
-    public OAIDataList<? extends Record> getRecords(String resumptionToken) throws BadResumptionTokenException;
+    OAIDataList<? extends Record> getRecords(String resumptionToken) throws BadResumptionTokenException;
 
     /**
      * Returns a list of records matching the set and/or datestamp.
@@ -146,7 +146,7 @@ public interface OAIAdapter {
      * @throws NoRecordsMatchException
      *             The combination of the values of the from, until, set and metadataPrefix arguments results in an empty list.
      */
-    public OAIDataList<? extends Record> getRecords(MetadataFormat format, Set set, Instant from, Instant until)
+    OAIDataList<? extends Record> getRecords(MetadataFormat format, Set set, Instant from, Instant until)
         throws CannotDisseminateFormatException, NoSetHierarchyException, NoRecordsMatchException;
 
     /**
@@ -158,7 +158,7 @@ public interface OAIAdapter {
      * @throws BadResumptionTokenException
      *             The value of the resumptionToken argument is invalid or expired.
      */
-    public OAIDataList<? extends Header> getHeaders(String resumptionToken) throws BadResumptionTokenException;
+    OAIDataList<? extends Header> getHeaders(String resumptionToken) throws BadResumptionTokenException;
 
     /**
      * Returns a list of headers.
@@ -180,7 +180,7 @@ public interface OAIAdapter {
      * @throws NoRecordsMatchException
      *             The combination of the values of the from, until, set and metadataPrefix arguments results in an empty list.
      */
-    public OAIDataList<? extends Header> getHeaders(MetadataFormat format, Set set, Instant from, Instant until)
+    OAIDataList<? extends Header> getHeaders(MetadataFormat format, Set set, Instant from, Instant until)
         throws CannotDisseminateFormatException, NoSetHierarchyException, NoRecordsMatchException;
 
 }

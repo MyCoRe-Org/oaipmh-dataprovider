@@ -26,7 +26,7 @@ public class IdentifyHandler extends JAXBVerbHandler {
 
     @Override
     public Map<Argument, ArgumentType> getArgumentMap() {
-        return new HashMap<Argument, OAIRequest.ArgumentType>();
+        return new HashMap<>();
     }
 
     @Override

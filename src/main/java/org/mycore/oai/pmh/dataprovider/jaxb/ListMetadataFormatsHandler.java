@@ -11,6 +11,7 @@ import org.mycore.oai.pmh.MetadataFormat;
 import org.mycore.oai.pmh.OAIConstants;
 import org.mycore.oai.pmh.OAIException;
 import org.mycore.oai.pmh.dataprovider.OAIAdapter;
+import org.mycore.oai.pmh.dataprovider.OAIImplementationException;
 import org.mycore.oai.pmh.dataprovider.OAIRequest;
 import org.mycore.oai.pmh.dataprovider.OAIRequest.ArgumentType;
 import org.openarchives.oai.pmh.ListMetadataFormatsType;
@@ -23,7 +24,7 @@ public class ListMetadataFormatsHandler extends JAXBVerbHandler {
 
     private static Map<Argument, ArgumentType> argumentMap = null;
     static {
-        argumentMap = new HashMap<Argument, OAIRequest.ArgumentType>();
+        argumentMap = new HashMap<>();
         argumentMap.put(Argument.identifier, ArgumentType.optional);
     }
 
@@ -45,7 +46,8 @@ public class ListMetadataFormatsHandler extends JAXBVerbHandler {
             // get all metadata formats
             formatList = this.oaiAdapter.getMetadataFormats();
             if (formatList == null || !checkOAIDublinCore(formatList)) {
-                LOGGER.warn("OAI adapter has to support oai_dc (http://www.openarchives.org/OAI/openarchivesprotocol.html#MetadataNamespaces). You can use DCMetadataFormat class.");
+                throw new OAIImplementationException(
+                        "OAI adapter has to support oai_dc (http://www.openarchives.org/OAI/openarchivesprotocol.html#MetadataNamespaces). You can use DCMetadataFormat class.");
             }
         } else {
             // get metadata formats of single object

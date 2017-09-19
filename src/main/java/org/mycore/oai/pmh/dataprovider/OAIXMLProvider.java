@@ -7,8 +7,8 @@ package org.mycore.oai.pmh.dataprovider;
  */
 public interface OAIXMLProvider {
 
-    public OAIResponse handleRequest(OAIRequest request);
+    OAIResponse handleRequest(OAIRequest request);
 
-    public OAIAdapter getAdapter();
+    OAIAdapter getAdapter();
 
 }
