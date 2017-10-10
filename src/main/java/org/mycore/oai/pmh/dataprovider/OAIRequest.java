@@ -214,8 +214,8 @@ public class OAIRequest {
             return;
         } else {
             // required
-            int misArgSize = missingArgumentList.size();
-            if (misArgSize > 0) {
+            int missArgSize = missingArgumentList.size();
+            if (missArgSize > 0) {
                 throw new BadArgumentException(Type.missing, toStringArray(missingArgumentList));
             }
         }
@@ -234,8 +234,7 @@ public class OAIRequest {
                 earliestDatestamp = DateUtils.startOfDay(earliestDatestamp);
             }
             if (until.compareTo(earliestDatestamp) < 0) {
-                throw new NoRecordsMatchException().setMessage(
-                    "The until date must be greater or equal the earliest date stamp!");
+                throw new BadArgumentException("The until date must be greater or equal the earliest date stamp!");
             }
         }
         if (from != null && until != null) {
@@ -260,14 +259,25 @@ public class OAIRequest {
     }
 
     private Instant checkDate(String dateAsString, Granularity reposGranularity, Argument argument)
-        throws BadArgumentException {
-        Granularity dateGranularity = DateUtils.guessGranularity(dateAsString);
-        if (Granularity.YYYY_MM_DD_THH_MM_SS_Z.equals(dateGranularity)
-            && Granularity.YYYY_MM_DD.equals(reposGranularity)) {
-            // if date is YYYY_MM_DD_THH_MM_SS_Z but repository supports only YYYY_MM_DD
-            throw new BadArgumentException("Bad date syntax '" + argument.name() + "':" + dateAsString);
+            throws BadArgumentException {
+        try {
+            Granularity dateGranularity = DateUtils.guessGranularity(dateAsString);
+            if (Granularity.YYYY_MM_DD_THH_MM_SS_Z.equals(dateGranularity) && Granularity.YYYY_MM_DD
+                    .equals(reposGranularity)) {
+                throw getBadDateException(dateAsString, reposGranularity, argument);
+            }
+            return DateUtils.parse(dateAsString);
+        } catch (BadArgumentException bae) {
+            throw bae;
+        } catch (Exception exc) {
+            throw getBadDateException(dateAsString, reposGranularity, argument);
         }
-        return DateUtils.parse(dateAsString);
+    }
+
+    private BadArgumentException getBadDateException(String dateAsString, Granularity reposGranularity,
+            Argument argument) {
+        return new BadArgumentException("Bad argument '" + argument.name() + "': " + dateAsString + ". This repository"
+                + " only supports dates in the form of " + reposGranularity.toString() + ".");
     }
 
     private String[] toStringArray(List<Argument> argList) {
