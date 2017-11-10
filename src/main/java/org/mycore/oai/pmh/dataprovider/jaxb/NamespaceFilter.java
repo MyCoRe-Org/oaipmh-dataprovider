@@ -14,8 +14,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * 
  * without filter:
  * &lt;mets:dmdSec ID="MY_DMD_SEC_ID" xmlns="" xmlns:ns4="http://www.openarchives.org/OAI/2.0/"&gt;
- * TODO check on side effects
- * 
+ *
  * @author Matthias Eichner
  */
 public class NamespaceFilter extends XMLFilterImpl {

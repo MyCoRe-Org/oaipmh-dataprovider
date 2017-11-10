@@ -4,7 +4,8 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 
 /**
- * A <code>OAIRespones</code> provides methods to get the generated xml of an {@link OAIXMLProvider}.
+ * OAI-PMH response abstraction. A <code>OAIResponse</code> provides methods to get the generated xml of an
+ * {@link OAIXMLProvider}.
  * 
  * @author Matthias Eichner
  */

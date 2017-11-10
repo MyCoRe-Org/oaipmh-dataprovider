@@ -21,6 +21,11 @@ import org.mycore.oai.pmh.NoRecordsMatchException;
 import org.mycore.oai.pmh.OAIIdentifierDescription;
 import org.mycore.oai.pmh.OAIUtils;
 
+/**
+ * OAI-PMH request abstraction.
+ *
+ * @author Matthias Eichner
+ */
 public class OAIRequest {
 
     public enum ArgumentType {
@@ -90,7 +95,7 @@ public class OAIRequest {
 
     /**
      * Creates a new oai request by verb.
-     * 
+     *
      * @param verb the request verb
      */
     public OAIRequest(String verb) {
@@ -101,7 +106,7 @@ public class OAIRequest {
 
     /**
      * Creates a new oai request by a map of url request parameters.
-     * 
+     *
      * @param parameterMap a map of request parameters
      */
     public OAIRequest(Map<String, List<String>> parameterMap) {
@@ -144,7 +149,7 @@ public class OAIRequest {
 
     /**
      * Sets a new argument.
-     * 
+     *
      * @param arg the argument to set
      * @param value the new value of the argument
      * @throws BadArgumentException if the argument is invalid
@@ -173,12 +178,11 @@ public class OAIRequest {
      * Checks if the request includes illegal arguments or is missing required arguments.
      * This method should be called by the {@link OAIXMLProvider}. There is no need to call
      * it manually. 
-     * 
+     *
      * @param argMap map of valid arguments and argument types of the current verb
      * @throws BadArgumentException if the request contains a bad argument
      */
-    public void checkBadArgument(Map<Argument, ArgumentType> argMap, OAIAdapter oaiAdapter)
-        throws BadArgumentException, NoRecordsMatchException {
+    public void checkBadArgument(Map<Argument, ArgumentType> argMap, OAIAdapter oaiAdapter) throws BadArgumentException, NoRecordsMatchException {
         if (this.badArgumentException != null) {
             throw this.badArgumentException;
         }
@@ -258,12 +262,10 @@ public class OAIRequest {
         }
     }
 
-    private Instant checkDate(String dateAsString, Granularity reposGranularity, Argument argument)
-            throws BadArgumentException {
+    private Instant checkDate(String dateAsString, Granularity reposGranularity, Argument argument) throws BadArgumentException {
         try {
             Granularity dateGranularity = DateUtils.guessGranularity(dateAsString);
-            if (Granularity.YYYY_MM_DD_THH_MM_SS_Z.equals(dateGranularity) && Granularity.YYYY_MM_DD
-                    .equals(reposGranularity)) {
+            if (Granularity.YYYY_MM_DD_THH_MM_SS_Z.equals(dateGranularity) && Granularity.YYYY_MM_DD.equals(reposGranularity)) {
                 throw getBadDateException(dateAsString, reposGranularity, argument);
             }
             return DateUtils.parse(dateAsString);
@@ -274,8 +276,7 @@ public class OAIRequest {
         }
     }
 
-    private BadArgumentException getBadDateException(String dateAsString, Granularity reposGranularity,
-            Argument argument) {
+    private BadArgumentException getBadDateException(String dateAsString, Granularity reposGranularity, Argument argument) {
         return new BadArgumentException("Bad argument '" + argument.name() + "': " + dateAsString + ". This repository"
                 + " only supports dates in the form of " + reposGranularity.toString() + ".");
     }
@@ -317,7 +318,7 @@ public class OAIRequest {
 
     /**
      * Checks if the identifier is set.
-     * 
+     *
      * @return true if set
      */
     public boolean isIdentifier() {
@@ -326,7 +327,7 @@ public class OAIRequest {
 
     /**
      * Checks if the metadata prefix is set.
-     * 
+     *
      * @return true if set
      */
     public boolean isMetadataPrefix() {
@@ -335,7 +336,7 @@ public class OAIRequest {
 
     /**
      * Checks if the from date is set.
-     * 
+     *
      * @return true if set
      */
     public boolean isFromDateSet() {
@@ -344,7 +345,7 @@ public class OAIRequest {
 
     /**
      * Checks if the from date is set.
-     * 
+     *
      * @return true if set
      */
     public boolean isUntilDateSet() {
@@ -353,7 +354,7 @@ public class OAIRequest {
 
     /**
      * Checks if a set is set.
-     * 
+     *
      * @return true if set
      */
     public boolean isSet() {
@@ -362,7 +363,7 @@ public class OAIRequest {
 
     /**
      * Checks if the resumption token is set.
-     * 
+     *
      * @return true if set
      */
     public boolean isResumptionToken() {
