@@ -14,20 +14,20 @@ public abstract class ListDataHandler extends ListRequestsHandler {
 
     protected final static Logger LOGGER = LogManager.getLogger(ListDataHandler.class);
 
-    private static Map<Argument, ArgumentType> argumentMap = null;
+    private static Map<Argument, ArgumentType> ARGUMENT_MAP;
 
     static {
-        argumentMap = new HashMap<Argument, OAIRequest.ArgumentType>();
-        argumentMap.put(Argument.from, ArgumentType.optional);
-        argumentMap.put(Argument.until, ArgumentType.optional);
-        argumentMap.put(Argument.metadataPrefix, ArgumentType.required);
-        argumentMap.put(Argument.set, ArgumentType.optional);
-        argumentMap.put(Argument.resumptionToken, ArgumentType.exclusive);
+        ARGUMENT_MAP = new HashMap<Argument, OAIRequest.ArgumentType>();
+        ARGUMENT_MAP.put(Argument.from, ArgumentType.optional);
+        ARGUMENT_MAP.put(Argument.until, ArgumentType.optional);
+        ARGUMENT_MAP.put(Argument.metadataPrefix, ArgumentType.required);
+        ARGUMENT_MAP.put(Argument.set, ArgumentType.optional);
+        ARGUMENT_MAP.put(Argument.resumptionToken, ArgumentType.exclusive);
     }
 
     @Override
     public Map<Argument, ArgumentType> getArgumentMap() {
-        return argumentMap;
+        return ARGUMENT_MAP;
     }
 
     public ListDataHandler(OAIAdapter oaiAdapter) {

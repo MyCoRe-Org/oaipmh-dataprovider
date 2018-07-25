@@ -17,7 +17,6 @@ import org.mycore.oai.pmh.BadArgumentException.Type;
 import org.mycore.oai.pmh.DateUtils;
 import org.mycore.oai.pmh.Granularity;
 import org.mycore.oai.pmh.Identify;
-import org.mycore.oai.pmh.NoRecordsMatchException;
 import org.mycore.oai.pmh.OAIIdentifierDescription;
 import org.mycore.oai.pmh.OAIUtils;
 
@@ -45,6 +44,8 @@ public class OAIRequest {
     private String set;
 
     private String resumptionToken;
+
+    private BadArgumentException badArgumentException;
 
     public String getVerb() {
         return verb;
@@ -102,8 +103,6 @@ public class OAIRequest {
         this.verb = verb;
     }
 
-    private BadArgumentException badArgumentException;
-
     /**
      * Creates a new oai request by a map of url request parameters.
      *
@@ -134,7 +133,7 @@ public class OAIRequest {
         if (!parameterMap.isEmpty()) {
             Set<String> set = parameterMap.keySet();
             // is temporary stored until checkBadArgument is called
-            this.badArgumentException = new BadArgumentException(Type.invalid, set.toArray(new String[set.size()]));
+            this.badArgumentException = new BadArgumentException(Type.invalid, set.toArray(new String[0]));
         }
     }
 
@@ -176,32 +175,35 @@ public class OAIRequest {
 
     /**
      * Checks if the request includes illegal arguments or is missing required arguments.
-     * This method should be called by the {@link OAIXMLProvider}. There is no need to call
+     * This method should be called by the {@link OAIProvider}. There is no need to call
      * it manually. 
      *
      * @param argMap map of valid arguments and argument types of the current verb
      * @throws BadArgumentException if the request contains a bad argument
      */
-    public void checkBadArgument(Map<Argument, ArgumentType> argMap, OAIAdapter oaiAdapter) throws BadArgumentException, NoRecordsMatchException {
+    public void checkBadArgument(Map<Argument, ArgumentType> argMap, OAIAdapter oaiAdapter)
+        throws BadArgumentException {
         if (this.badArgumentException != null) {
             throw this.badArgumentException;
         }
         Collection<Argument> requestArgCollection = getArguments().keySet();
-        // check illegal arguments
-        for (Argument requestArgument : requestArgCollection) {
-            if (!argMap.containsKey(requestArgument))
-                throw new BadArgumentException(Type.invalid, requestArgument.toString());
-        }
-        // check required && exclusive arguments
+        Identify identify = oaiAdapter.getIdentify();
+        checkIllegalArguments(argMap, requestArgCollection);
+        checkRequiredAndExclusiveArguments(argMap, requestArgCollection);
+        checkDates(identify);
+        checkIdentifier(identify);
+    }
+
+    private void checkRequiredAndExclusiveArguments(Map<Argument, ArgumentType> argMap,
+        Collection<Argument> requestArgCollection) throws BadArgumentException {
         List<Argument> missingArgumentList = new ArrayList<>();
         Argument exclusiveArgument = null;
         for (Map.Entry<Argument, ArgumentType> entry : argMap.entrySet()) {
             Argument arg = entry.getKey();
             ArgumentType type = entry.getValue();
             // check for required
-            if (type.equals(ArgumentType.required)) {
-                if (!requestArgCollection.contains(arg))
-                    missingArgumentList.add(arg);
+            if (type.equals(ArgumentType.required) && !requestArgCollection.contains(arg)) {
+                missingArgumentList.add(arg);
             }
             // check for exclusive
             if (type.equals(ArgumentType.exclusive) && requestArgCollection.contains(arg)) {
@@ -215,7 +217,6 @@ public class OAIRequest {
                 tempList.remove(exclusiveArgument);
                 throw new BadArgumentException(Type.invalid, toStringArray(tempList));
             }
-            return;
         } else {
             // required
             int missArgSize = missingArgumentList.size();
@@ -223,35 +224,9 @@ public class OAIRequest {
                 throw new BadArgumentException(Type.missing, toStringArray(missingArgumentList));
             }
         }
-        // check from & until dates
-        Identify identify = oaiAdapter.getIdentify();
-        Instant from = null;
-        Instant until = null;
-        Granularity granularity = identify.getGranularity();
-        if (isFromDateSet()) {
-            from = checkDate(this.from, granularity, Argument.from);
-        }
-        if (isUntilDateSet()) {
-            until = checkDate(this.until, granularity, Argument.until);
-            Instant earliestDatestamp = identify.getEarliestDatestamp();
-            if (Granularity.YYYY_MM_DD.equals(granularity)) {
-                earliestDatestamp = DateUtils.startOfDay(earliestDatestamp);
-            }
-            if (until.compareTo(earliestDatestamp) < 0) {
-                throw new BadArgumentException("The until date must be greater or equal the earliest date stamp!");
-            }
-        }
-        if (from != null && until != null) {
-            if (from.compareTo(until) > 0) {
-                throw new NoRecordsMatchException().setMessage("The from date must be less or equal the until date!");
-            }
-            Granularity fromGranularity = DateUtils.guessGranularity(this.from);
-            Granularity untilGranularity = DateUtils.guessGranularity(this.until);
-            if (!fromGranularity.equals(untilGranularity)) {
-                throw new BadArgumentException("The from and until date granularity have to be equal!");
-            }
-        }
-        // check identifier
+    }
+
+    private void checkIdentifier(Identify identify) throws BadArgumentException {
         if (isIdentifier() && !OAIUtils.checkIdentifier(this.identifier, identify)) {
             OAIIdentifierDescription idDesc = OAIUtils.getIdentifierDescription(identify);
             if (idDesc != null) {
@@ -262,10 +237,42 @@ public class OAIRequest {
         }
     }
 
-    private Instant checkDate(String dateAsString, Granularity reposGranularity, Argument argument) throws BadArgumentException {
+    private void checkDates(Identify identify) throws BadArgumentException {
+        Instant from = null;
+        Instant until = null;
+        Granularity granularity = identify.getGranularity();
+        if (isFromDateSet()) {
+            from = checkDate(this.from, granularity, Argument.from);
+        }
+        if (isUntilDateSet()) {
+            until = checkDate(this.until, granularity, Argument.until);
+        }
+        if (from != null && until != null) {
+            if (from.isAfter(until)) {
+                throw new BadArgumentException("The 'from' date must be less than or equal to the 'to' date.!");
+            }
+            Granularity fromGranularity = DateUtils.guessGranularity(this.from);
+            Granularity untilGranularity = DateUtils.guessGranularity(this.until);
+            if (!fromGranularity.equals(untilGranularity)) {
+                throw new BadArgumentException("The from and until date granularity have to be equal!");
+            }
+        }
+    }
+
+    private void checkIllegalArguments(Map<Argument, ArgumentType> argMap,
+        Collection<Argument> requestArgCollection) throws BadArgumentException {
+        for (Argument requestArgument : requestArgCollection) {
+            if (!argMap.containsKey(requestArgument))
+                throw new BadArgumentException(Type.invalid, requestArgument.toString());
+        }
+    }
+
+    private Instant checkDate(String dateAsString, Granularity reposGranularity, Argument argument)
+        throws BadArgumentException {
         try {
             Granularity dateGranularity = DateUtils.guessGranularity(dateAsString);
-            if (Granularity.YYYY_MM_DD_THH_MM_SS_Z.equals(dateGranularity) && Granularity.YYYY_MM_DD.equals(reposGranularity)) {
+            if (Granularity.YYYY_MM_DD_THH_MM_SS_Z.equals(dateGranularity)
+                && Granularity.YYYY_MM_DD.equals(reposGranularity)) {
                 throw getBadDateException(dateAsString, reposGranularity, argument);
             }
             return DateUtils.parse(dateAsString);
@@ -276,9 +283,10 @@ public class OAIRequest {
         }
     }
 
-    private BadArgumentException getBadDateException(String dateAsString, Granularity reposGranularity, Argument argument) {
+    private BadArgumentException getBadDateException(String dateAsString, Granularity reposGranularity,
+        Argument argument) {
         return new BadArgumentException("Bad argument '" + argument.name() + "': " + dateAsString + ". This repository"
-                + " only supports dates in the form of " + reposGranularity.toString() + ".");
+            + " only supports dates in the form of " + reposGranularity.toString() + ".");
     }
 
     private String[] toStringArray(List<Argument> argList) {

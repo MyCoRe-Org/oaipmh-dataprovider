@@ -1,4 +1,4 @@
-package org.mycore.oai.pmh.provider;
+package org.mycore.oai.pmh.dataprovider;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;

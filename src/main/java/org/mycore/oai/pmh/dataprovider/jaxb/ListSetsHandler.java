@@ -21,15 +21,16 @@ import org.openarchives.oai.pmh.SetType;
 
 public class ListSetsHandler extends ListRequestsHandler {
 
-    private static Map<Argument, ArgumentType> argumentMap = null;
+    private static Map<Argument, ArgumentType> ARGUMENT_MAP;
+
     static {
-        argumentMap = new HashMap<>();
-        argumentMap.put(Argument.resumptionToken, ArgumentType.exclusive);
+        ARGUMENT_MAP = new HashMap<>();
+        ARGUMENT_MAP.put(Argument.resumptionToken, ArgumentType.exclusive);
     }
 
     @Override
     public Map<Argument, ArgumentType> getArgumentMap() {
-        return argumentMap;
+        return ARGUMENT_MAP;
     }
 
     public ListSetsHandler(OAIAdapter oaiAdapter) {
@@ -37,37 +38,38 @@ public class ListSetsHandler extends ListRequestsHandler {
     }
 
     @Override
-	public OAIPMHtype handle(OAIRequest request) throws OAIException {
-	    OAIDataList<? extends Set> setList;
-	    if(request.isResumptionToken()) {
-	        setList = this.oaiAdapter.getSets(request.getResumptionToken());
-	    } else {
-	        setList = this.oaiAdapter.getSets();
-	    }
-	    
-	    ListSetsType listSetsType = new ListSetsType();
-	    for(Set set : setList) {
-	        SetType setType = new SetType();
-	        setType.setSetName(set.getName());
-	        setType.setSetSpec(set.getSpec());
-	        
-	        for(Description description : set.getDescription()) {
-	            DescriptionType descriptionType = new DescriptionType();
-	            try {
+    public OAIPMHtype handle(OAIRequest request) throws OAIException {
+        OAIDataList<? extends Set> setList;
+        if (request.isResumptionToken()) {
+            setList = this.oaiAdapter.getSets(request.getResumptionToken());
+        } else {
+            setList = this.oaiAdapter.getSets();
+        }
+
+        ListSetsType listSetsType = new ListSetsType();
+        for (Set set : setList) {
+            SetType setType = new SetType();
+            setType.setSetName(set.getName());
+            setType.setSetSpec(set.getSpec());
+
+            for (Description description : set.getDescription()) {
+                DescriptionType descriptionType = new DescriptionType();
+                try {
                     descriptionType.setAny(OAIUtils.jdomToDOM(description.toXML()));
                     setType.getSetDescription().add(descriptionType);
                 } catch (JDOMException exc) {
                     throw new OAIImplementationException(exc);
                 }
             }
-	        listSetsType.getSet().add(setType);
-	    }
+            listSetsType.getSet().add(setType);
+        }
         // set resumption token
         if (setList.isResumptionTokenSet()) {
             listSetsType.setResumptionToken(toJAXBResumptionToken(setList.getResumptionToken()));
         }
-	    OAIPMHtype oaipmh = new OAIPMHtype();
-	    oaipmh.setListSets(listSetsType);
-	    return oaipmh;
-	}
+        OAIPMHtype oaipmh = new OAIPMHtype();
+        oaipmh.setListSets(listSetsType);
+        return oaipmh;
+    }
+
 }

@@ -7,13 +7,13 @@ import org.mycore.oai.pmh.OAIException;
 import org.mycore.oai.pmh.dataprovider.OAIAdapter;
 import org.mycore.oai.pmh.dataprovider.OAIRequest;
 import org.mycore.oai.pmh.dataprovider.OAIRequest.ArgumentType;
-import org.mycore.oai.pmh.dataprovider.VerbHandler;
+import org.mycore.oai.pmh.dataprovider.OAIVerbHandler;
 import org.openarchives.oai.pmh.OAIPMHtype;
 
 /**
- * Base class to handle all OAI-PMH verbs.
+ * JAXB implementation of a verb handler. Uses a {@link OAIPMHtype} as result.
  */
-public abstract class JAXBVerbHandler implements VerbHandler<OAIPMHtype> {
+public abstract class JAXBVerbHandler implements OAIVerbHandler<OAIPMHtype> {
 
     protected OAIAdapter oaiAdapter;
 

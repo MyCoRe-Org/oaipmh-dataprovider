@@ -5,7 +5,7 @@ import org.jdom2.JDOMException;
 
 /**
  * OAI-PMH response abstraction. A <code>OAIResponse</code> provides methods to get the generated xml of an
- * {@link OAIXMLProvider}.
+ * {@link OAIProvider}.
  * 
  * @author Matthias Eichner
  */

@@ -2,19 +2,14 @@ package org.mycore.oai.pmh.dataprovider.jaxb;
 
 import java.time.Instant;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mycore.oai.pmh.BadArgumentException;
 import org.mycore.oai.pmh.BadVerbException;
-import org.mycore.oai.pmh.DateUtils;
-import org.mycore.oai.pmh.NoRecordsMatchException;
 import org.mycore.oai.pmh.OAIException;
 import org.mycore.oai.pmh.OAIException.ErrorCode;
 import org.mycore.oai.pmh.Verb;
 import org.mycore.oai.pmh.dataprovider.OAIAdapter;
+import org.mycore.oai.pmh.dataprovider.OAIBaseProvider;
 import org.mycore.oai.pmh.dataprovider.OAIRequest;
 import org.mycore.oai.pmh.dataprovider.OAIResponse;
-import org.mycore.oai.pmh.dataprovider.OAIXMLProvider;
 import org.openarchives.oai.pmh.OAIPMHerrorType;
 import org.openarchives.oai.pmh.OAIPMHerrorcodeType;
 import org.openarchives.oai.pmh.OAIPMHtype;
@@ -22,96 +17,40 @@ import org.openarchives.oai.pmh.RequestType;
 import org.openarchives.oai.pmh.VerbType;
 
 /**
- * Implementation of a {@link OAIXMLProvider} using the JAXB API.
+ * Implementation of a {@link OAIBaseProvider} using the JAXB API.
  * 
  * @author Matthias Eichner
  */
-public class JAXBOAIProvider implements OAIXMLProvider {
-
-    private static Logger LOGGER = LogManager.getLogger();
-
-    protected OAIAdapter oaiAdapter;
+public class JAXBOAIProvider extends OAIBaseProvider<JAXBVerbHandler> {
 
     public JAXBOAIProvider(OAIAdapter oaiAdapter) {
-        this.oaiAdapter = oaiAdapter;
+        super(oaiAdapter);
     }
 
     @Override
-    public OAIResponse handleRequest(OAIRequest request) {
-        long startTime = System.currentTimeMillis();
-        try {
-            return handle(request);
-        } finally {
-            LOGGER.info(
-                "OAI-PMH request " + request + " took " + (System.currentTimeMillis() - startTime) + "ms to process.");
-        }
-    }
-
-    private OAIResponse handle(OAIRequest request) {
-        // set global granularity
-        DateUtils.setGranularity(this.getAdapter().getIdentify().getGranularity());
-        // check verb
-        JAXBVerbHandler verbHandler;
-        Verb verb;
-        try {
-            verb = Verb.valueOf(request.getVerb());
-        } catch (Exception exc) {
-            return getErrorResponse(new BadVerbException(request.getVerb()), request);
-        }
+    protected JAXBVerbHandler getVerbHandler(Verb verb) throws BadVerbException {
         if (Verb.GetRecord.equals(verb)) {
-            verbHandler = getRecordHandler();
+            return new GetRecordHandler(this.getAdapter());
         } else if (Verb.Identify.equals(verb)) {
-            verbHandler = getIdentifyHandler();
+            return new IdentifyHandler(this.getAdapter());
         } else if (Verb.ListIdentifiers.equals(verb)) {
-            verbHandler = getListIdentifiersHandler();
+            return new ListIdentifiersHandler(this.getAdapter());
         } else if (Verb.ListMetadataFormats.equals(verb)) {
-            verbHandler = getListMetadataFormatsHandler();
+            return new ListMetadataFormatsHandler(this.getAdapter());
         } else if (Verb.ListRecords.equals(verb)) {
-            verbHandler = getListRecordsHandler();
+            return new ListRecordsHandler(this.getAdapter());
         } else if (Verb.ListSets.equals(verb)) {
-            verbHandler = getListSetsHandler();
-        } else {
-            return getErrorResponse(new BadVerbException(request.getVerb()), request);
+            return new ListSetsHandler(this.getAdapter());
         }
-        // check arguments
-        try {
-            request.checkBadArgument(verbHandler.getArgumentMap(), this.getAdapter());
-        } catch (BadArgumentException | NoRecordsMatchException exc) {
-            return getErrorResponse(exc, request);
-        }
-        // handle request
-        try {
-            OAIPMHtype oaipmh = verbHandler.handle(request);
-            oaipmh.setRequest(getRequestType(request, false));
-            oaipmh.setResponseDate(getResponseDate());
-            return new JAXBOAIResponse(oaipmh);
-        } catch (OAIException oaiExc) {
-            return getErrorResponse(oaiExc, request);
-        }
+        throw new BadVerbException(verb.name());
     }
 
-    protected JAXBVerbHandler getRecordHandler() {
-        return new GetRecordHandler(this.getAdapter());
-    }
-
-    protected JAXBVerbHandler getIdentifyHandler() {
-        return new IdentifyHandler(this.getAdapter());
-    }
-
-    protected JAXBVerbHandler getListIdentifiersHandler() {
-        return new ListIdentifiersHandler(this.getAdapter());
-    }
-
-    protected JAXBVerbHandler getListMetadataFormatsHandler() {
-        return new ListMetadataFormatsHandler(this.getAdapter());
-    }
-
-    protected JAXBVerbHandler getListRecordsHandler() {
-        return new ListRecordsHandler(this.getAdapter());
-    }
-
-    protected JAXBVerbHandler getListSetsHandler() {
-        return new ListSetsHandler(this.getAdapter());
+    @Override
+    protected OAIResponse handle(OAIRequest request, JAXBVerbHandler verbHandler) throws OAIException {
+        OAIPMHtype oaipmh = verbHandler.handle(request);
+        oaipmh.setRequest(getRequestType(request, false));
+        oaipmh.setResponseDate(getResponseDate());
+        return new JAXBOAIResponse(oaipmh);
     }
 
     protected RequestType getRequestType(OAIRequest req, boolean errorOccur) {
@@ -130,6 +69,7 @@ public class JAXBOAIProvider implements OAIXMLProvider {
         return rt;
     }
 
+    @Override
     protected OAIResponse getErrorResponse(OAIException oaiExc, OAIRequest request) {
         OAIPMHtype oaipmh = new OAIPMHtype();
         oaipmh.getError().add(getError(oaiExc.getCode(), oaiExc.getMessage()));
@@ -147,11 +87,6 @@ public class JAXBOAIProvider implements OAIXMLProvider {
 
     protected Instant getResponseDate() {
         return Instant.now();
-    }
-
-    @Override
-    public OAIAdapter getAdapter() {
-        return this.oaiAdapter;
     }
 
 }

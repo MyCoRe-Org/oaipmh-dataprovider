@@ -1,4 +1,4 @@
-package org.mycore.oai.pmh.provider;
+package org.mycore.oai.pmh.dataprovider;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -10,7 +10,6 @@ import org.mycore.oai.pmh.BadResumptionTokenException;
 import org.mycore.oai.pmh.CannotDisseminateFormatException;
 import org.mycore.oai.pmh.DateUtils;
 import org.mycore.oai.pmh.DefaultResumptionToken;
-import org.mycore.oai.pmh.Description;
 import org.mycore.oai.pmh.FriendsDescription;
 import org.mycore.oai.pmh.Granularity;
 import org.mycore.oai.pmh.Header;
@@ -18,18 +17,14 @@ import org.mycore.oai.pmh.Header.Status;
 import org.mycore.oai.pmh.IdDoesNotExistException;
 import org.mycore.oai.pmh.Identify;
 import org.mycore.oai.pmh.Identify.DeletedRecordPolicy;
-import org.mycore.oai.pmh.Metadata;
 import org.mycore.oai.pmh.MetadataFormat;
-import org.mycore.oai.pmh.NoMetadataFormatsException;
 import org.mycore.oai.pmh.NoRecordsMatchException;
-import org.mycore.oai.pmh.NoSetHierarchyException;
 import org.mycore.oai.pmh.OAIDataList;
 import org.mycore.oai.pmh.OAIIdentifierDescription;
 import org.mycore.oai.pmh.Record;
 import org.mycore.oai.pmh.ResumptionToken;
 import org.mycore.oai.pmh.Set;
 import org.mycore.oai.pmh.SimpleIdentify;
-import org.mycore.oai.pmh.dataprovider.OAIAdapter;
 import org.mycore.oai.pmh.dc.DCMetadataFormat;
 
 public class SimpleOAIAdapter implements OAIAdapter {
@@ -48,21 +43,23 @@ public class SimpleOAIAdapter implements OAIAdapter {
 
     public Set set1, set2;
 
-    public OAIDataList<Set> setList = new OAIDataList<Set>();
+    public OAIDataList<Set> setList = new OAIDataList<>();
 
     public MetadataFormat dcFormat, modsFormat;
 
-    public List<MetadataFormat> metadataFormatList = new ArrayList<MetadataFormat>();
+    public List<MetadataFormat> metadataFormatList = new ArrayList<>();
 
     public Record modsRecord, deletedRecord;
 
-    public OAIDataList<Record> recordList = new OAIDataList<Record>();
+    public OAIDataList<Record> recordList = new OAIDataList<>();
+
+    public Instant earliestDate;
 
     public SimpleOAIAdapter() {
         // set id
         String reposName = "Test OAI Provider";
         String baseURL = "www.mycore.de";
-        Instant earliestDate = DateUtils.parse("2010-10-10");
+        this.earliestDate = DateUtils.parse("2010-10-10");
         String adminMail = "sampleuser@bugmenot.de";
         this.id = new SimpleTestIdentify(reposName, baseURL, earliestDate, DeletedRecordPolicy.No,
             Granularity.YYYY_MM_DD_THH_MM_SS_Z, adminMail);
@@ -79,18 +76,15 @@ public class SimpleOAIAdapter implements OAIAdapter {
         this.metadataFormatList.add(this.dcFormat);
         this.metadataFormatList.add(this.modsFormat);
         // mods record
-        this.modsRecord = new Record("oai:sample.de:modsrecord", DateUtils.parse("2010-10-12"), new Metadata() {
-            @Override
-            public Element toXML() {
-                Element mods = new Element("mods", NS_MODS);
-                mods.addNamespaceDeclaration(NS_DDB);
-                mods.addNamespaceDeclaration(NS_DC);
-                mods.setAttribute("schemaLocation", SCHEMA_LOC_MODS, NS_XSI);
-                mods.addContent(new Element("note", NS_MODS).setText("sample note").setAttribute("attr", "sample"));
-                mods.addContent(
-                    new Element("title", NS_DC).setText("title").setAttribute("type", "ddb:titleISO639-2", NS_XSI));
-                return mods;
-            }
+        this.modsRecord = new Record("oai:sample.de:modsrecord", DateUtils.parse("2010-10-12"), () -> {
+            Element mods = new Element("mods", NS_MODS);
+            mods.addNamespaceDeclaration(NS_DDB);
+            mods.addNamespaceDeclaration(NS_DC);
+            mods.setAttribute("schemaLocation", SCHEMA_LOC_MODS, NS_XSI);
+            mods.addContent(new Element("note", NS_MODS).setText("sample note").setAttribute("attr", "sample"));
+            mods.addContent(
+                new Element("title", NS_DC).setText("title").setAttribute("type", "ddb:titleISO639-2", NS_XSI));
+            return mods;
         });
         this.modsRecord.getHeader().getSetList().add(set1);
         this.deletedRecord = new Record("oai:sample.de:deletedrecord", DateUtils.parse("2009-11-11"),
@@ -105,7 +99,7 @@ public class SimpleOAIAdapter implements OAIAdapter {
     }
 
     @Override
-    public OAIDataList<Set> getSets() throws NoSetHierarchyException {
+    public OAIDataList<Set> getSets() {
         return setList;
     }
 
@@ -121,7 +115,7 @@ public class SimpleOAIAdapter implements OAIAdapter {
 
     @Override
     public OAIDataList<Set> getSets(String resumptionToken)
-        throws NoSetHierarchyException, BadResumptionTokenException {
+        throws BadResumptionTokenException {
         throw new BadResumptionTokenException(resumptionToken);
     }
 
@@ -142,14 +136,13 @@ public class SimpleOAIAdapter implements OAIAdapter {
 
     @Override
     public List<MetadataFormat> getMetadataFormats(String identifier)
-        throws IdDoesNotExistException, NoMetadataFormatsException {
-        OAIDataList<MetadataFormat> fList = new OAIDataList<MetadataFormat>();
+        throws IdDoesNotExistException {
+        OAIDataList<MetadataFormat> fList = new OAIDataList<>();
         for (MetadataFormat f : this.metadataFormatList) {
             try {
                 this.getRecord(identifier, f);
                 fList.add(f);
-            } catch (CannotDisseminateFormatException cdf) {
-                continue;
+            } catch (CannotDisseminateFormatException ignored) {
             }
         }
         return fList;
@@ -183,12 +176,15 @@ public class SimpleOAIAdapter implements OAIAdapter {
 
     @Override
     public OAIDataList<Record> getRecords(MetadataFormat format, Set set, Instant from, Instant until)
-        throws CannotDisseminateFormatException, NoSetHierarchyException, NoRecordsMatchException {
+        throws CannotDisseminateFormatException, NoRecordsMatchException {
         if (!(format.equals(modsFormat) || format.equals(dcFormat))) {
             throw new CannotDisseminateFormatException().setMetadataPrefix(format.getPrefix());
         }
+        if(until.isBefore(earliestDate)) {
+            throw new NoRecordsMatchException();
+        }
         if (format.equals(modsFormat)) {
-            OAIDataList<Record> l = new OAIDataList<Record>();
+            OAIDataList<Record> l = new OAIDataList<>();
             if (set == null) {
                 l.add(modsRecord);
                 l.add(deletedRecord);
@@ -203,12 +199,12 @@ public class SimpleOAIAdapter implements OAIAdapter {
 
     @Override
     public OAIDataList<Header> getHeaders(MetadataFormat format, Set set, Instant from, Instant until)
-        throws CannotDisseminateFormatException, NoSetHierarchyException, NoRecordsMatchException {
+        throws CannotDisseminateFormatException, NoRecordsMatchException {
         if (!(format.equals(modsFormat) || format.equals(dcFormat))) {
             throw new CannotDisseminateFormatException().setMetadataPrefix(format.getPrefix());
         }
         if (format.equals(modsFormat)) {
-            OAIDataList<Header> l = new OAIDataList<Header>();
+            OAIDataList<Header> l = new OAIDataList<>();
             l.setResumptionToken(getRsToken());
             if (set == null) {
                 l.add(modsRecord.getHeader());
@@ -245,9 +241,9 @@ public class SimpleOAIAdapter implements OAIAdapter {
             this.deletedRecordPolicy = delRecPol;
             this.granularity = granularity;
             this.protocolVersion = "2.0";
-            this.adminEmailList = new ArrayList<String>();
+            this.adminEmailList = new ArrayList<>();
             this.adminEmailList.add(adminMail);
-            this.descriptionList = new ArrayList<Description>();
+            this.descriptionList = new ArrayList<>();
         }
 
     }
