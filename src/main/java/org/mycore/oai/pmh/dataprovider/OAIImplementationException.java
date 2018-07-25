@@ -6,6 +6,7 @@ package org.mycore.oai.pmh.dataprovider;
  * @author Matthias Eichner
  */
 public class OAIImplementationException extends RuntimeException {
+
     private static final long serialVersionUID = 1L;
 
     public OAIImplementationException(String message) {

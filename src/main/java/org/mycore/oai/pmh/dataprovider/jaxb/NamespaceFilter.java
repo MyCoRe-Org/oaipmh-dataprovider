@@ -25,9 +25,7 @@ public class NamespaceFilter extends XMLFilterImpl {
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("start element (" + xmlns + "): " + uri + " " + localName + " " + qName);
-        }
+        LOGGER.debug("start element ({}): {} {} {}", xmlns, uri, localName, qName);
         if (uri.equals(xmlns)) {
             super.startElement(uri, localName, localName, atts);
         } else {
@@ -37,9 +35,7 @@ public class NamespaceFilter extends XMLFilterImpl {
 
     @Override
     public void startPrefixMapping(String prefix, String uri) throws SAXException {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("start prefix (" + xmlns + "): " + prefix + " " + uri);
-        }
+        LOGGER.debug("start prefix ({}): {} {}", xmlns, prefix, uri);
         if (uri == null || uri.equals("")) {
             return;
         }
@@ -51,10 +47,8 @@ public class NamespaceFilter extends XMLFilterImpl {
     }
 
     @Override
-    public void endPrefixMapping(String prefix) throws SAXException {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("end prefix (" + xmlns + "): " + prefix);
-        }
+    public void endPrefixMapping(String prefix) {
+        LOGGER.debug("end prefix ({}): {}", xmlns, prefix);
     }
 
 }

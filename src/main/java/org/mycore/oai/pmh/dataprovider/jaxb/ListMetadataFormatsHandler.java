@@ -22,15 +22,16 @@ public class ListMetadataFormatsHandler extends JAXBVerbHandler {
 
     protected final static Logger LOGGER = LogManager.getLogger(ListMetadataFormatsHandler.class);
 
-    private static Map<Argument, ArgumentType> argumentMap = null;
+    private static Map<Argument, ArgumentType> ARGUMENT_MAP;
+
     static {
-        argumentMap = new HashMap<>();
-        argumentMap.put(Argument.identifier, ArgumentType.optional);
+        ARGUMENT_MAP = new HashMap<>();
+        ARGUMENT_MAP.put(Argument.identifier, ArgumentType.optional);
     }
 
     @Override
     public Map<Argument, ArgumentType> getArgumentMap() {
-        return argumentMap;
+        return ARGUMENT_MAP;
     }
 
     public ListMetadataFormatsHandler(OAIAdapter oaiAdapter) {
@@ -47,7 +48,7 @@ public class ListMetadataFormatsHandler extends JAXBVerbHandler {
             formatList = this.oaiAdapter.getMetadataFormats();
             if (formatList == null || !checkOAIDublinCore(formatList)) {
                 throw new OAIImplementationException(
-                        "OAI adapter has to support oai_dc (http://www.openarchives.org/OAI/openarchivesprotocol.html#MetadataNamespaces). You can use DCMetadataFormat class.");
+                    "OAI adapter has to support oai_dc (http://www.openarchives.org/OAI/openarchivesprotocol.html#MetadataNamespaces). You can use DCMetadataFormat class.");
             }
         } else {
             // get metadata formats of single object
@@ -83,4 +84,5 @@ public class ListMetadataFormatsHandler extends JAXBVerbHandler {
         }
         return false;
     }
+
 }

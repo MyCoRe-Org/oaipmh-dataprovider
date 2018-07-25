@@ -52,7 +52,7 @@ public abstract class JAXBUtils {
         String id = header.getId();
         // check if id is correct
         if (!OAIUtils.checkIdentifier(id, identify)) {
-            LOGGER.warn("invalid OAI-PMH id " + id);
+            LOGGER.warn("invalid OAI-PMH id {}", id);
         }
         headerType.setIdentifier(id);
         headerType.setDatestamp(header.getDatestamp());

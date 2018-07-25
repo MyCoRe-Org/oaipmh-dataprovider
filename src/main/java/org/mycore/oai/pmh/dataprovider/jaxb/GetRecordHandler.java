@@ -16,21 +16,21 @@ import org.openarchives.oai.pmh.RecordType;
 
 public class GetRecordHandler extends JAXBVerbHandler {
 
+    private static Map<Argument, ArgumentType> ARGUMENT_MAP;
+
+    static {
+        ARGUMENT_MAP = new HashMap<>();
+        ARGUMENT_MAP.put(Argument.identifier, ArgumentType.required);
+        ARGUMENT_MAP.put(Argument.metadataPrefix, ArgumentType.required);
+    }
+
     public GetRecordHandler(OAIAdapter oaiAdapter) {
         super(oaiAdapter);
     }
 
-    private static Map<Argument, ArgumentType> argumentMap = null;
-
-    static {
-        argumentMap = new HashMap<>();
-        argumentMap.put(Argument.identifier, ArgumentType.required);
-        argumentMap.put(Argument.metadataPrefix, ArgumentType.required);
-    }
-
     @Override
     public Map<Argument, ArgumentType> getArgumentMap() {
-        return argumentMap;
+        return ARGUMENT_MAP;
     }
 
     @Override
